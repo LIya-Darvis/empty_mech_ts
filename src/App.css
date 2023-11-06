@@ -57,9 +57,10 @@ body {
 }
 
 .panel_button {
-  height: 1em;
-  width: 1em;
+  padding: 0.2em 0.5em;
+  margin: 0em 0.2em;
   background-color: #d8d8d8;
+  color: #1b1b1b;
 }
 
 .page_list_container {

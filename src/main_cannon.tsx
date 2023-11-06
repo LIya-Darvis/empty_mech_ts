@@ -154,56 +154,56 @@ let loadedObjectChildren: ObjectChild[] = []
 let loadedMesh: THREE.Object3D
 let loadedBody: CANNON.Body
 let modelLoaded = false
-const objLoader = new OBJLoader()
+const objLoader = new GLTFLoader()
 objLoader.load(
-    '../src/assets/composite_cube_center_surface_mass.obj',
+    '../src/assets/composite_cube_with_center.glb',
     (object) => {
-        // scene.add(object)
+        scene.add(object)
 
-        console.log(object.children.length)
+        // console.log(object.children.length)
 
-        for (let i = 0; i < object.children.length; i++) {
-            console.log("счетчик: ", i)
-            console.log("имя детали: " + object.children[i].name)
+        // for (let i = 0; i < object.children.length; i++) {
+        //     console.log("счетчик: ", i)
+        //     console.log("имя детали: " + object.children[i].name)
 
-            loadedMesh = object.children[i];
-            (loadedMesh as THREE.Mesh).material = normalMaterial
-            loadedMesh.position.x = 0
-            loadedMesh.position.y = 15
+        //     loadedMesh = object.children[i];
+        //     (loadedMesh as THREE.Mesh).material = normalMaterial
+        //     loadedMesh.position.x = 0
+        //     loadedMesh.position.y = 15
 
-            const modelShape = CreateTrimesh(
-                (loadedMesh as THREE.Mesh).geometry
-            )
+        //     const modelShape = CreateTrimesh(
+        //         (loadedMesh as THREE.Mesh).geometry
+        //     )
 
-            loadedBody = new CANNON.Body({ 
-                mass: 15,
-                material: objectPhysMat
-             })
-            loadedBody.addShape(modelShape)
-            loadedBody.position.x = loadedMesh.position.x
-            loadedBody.position.y = loadedMesh.position.y
-            loadedBody.position.z = loadedMesh.position.z
+        //     loadedBody = new CANNON.Body({ 
+        //         mass: 15,
+        //         material: objectPhysMat
+        //      })
+        //     loadedBody.addShape(modelShape)
+        //     loadedBody.position.x = loadedMesh.position.x
+        //     loadedBody.position.y = loadedMesh.position.y
+        //     loadedBody.position.z = loadedMesh.position.z
 
-            let newChild = new ObjectChild(object.children[i].id, object.children[i].name, 
-                                            loadedMesh, loadedBody);
-            loadedObjectChildren.push(newChild)
-            console.log("Мешшшш: ", loadedObjectChildren[i].mesh)
+        //     let newChild = new ObjectChild(object.children[i].id, object.children[i].name, 
+        //                                     loadedMesh, loadedBody);
+        //     loadedObjectChildren.push(newChild)
+        //     console.log("Мешшшш: ", loadedObjectChildren[i].mesh)
             
-            // нада
-            // scene.add(loadedObjectChildren[loadingCount].mesh)
-            // world.addBody(loadedObjectChildren[i].body)
+        //     // нада
+        //     // scene.add(loadedObjectChildren[loadingCount].mesh)
+        //     // world.addBody(loadedObjectChildren[i].body)
 
-            console.log("почему ты вышел из цикла")
-        }
+        //     console.log("почему ты вышел из цикла")
+        // }
 
         console.log("Оп ОП оП новый цикл")
 
-        for (let i = 0; i < loadedObjectChildren.length; i++) {
-            console.log("НАЧИНАЕМ   ВЕСЕЛЬЕ !    !")
-            loadedObjectChildren[i].display()
-            scene.add(loadedObjectChildren[i].mesh)
-            world.addBody(loadedObjectChildren[i].body)
-        }
+        // for (let i = 0; i < loadedObjectChildren.length; i++) {
+        //     console.log("НАЧИНАЕМ   ВЕСЕЛЬЕ !    !")
+        //     loadedObjectChildren[i].display()
+        //     scene.add(loadedObjectChildren[i].mesh)
+        //     world.addBody(loadedObjectChildren[i].body)
+        // }
 
         /* 
         есть ли в этом какой то смысл, особенно если в данной случае я просто пытаюсь 

@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@babylonjs/havok": "^1.2.1",
     "@tauri-apps/api": "^1.5.0",
     "@types/react-router-dom": "^5.3.3",
     "ammo.js": "github:kripken/ammo.js",
@@ -28,7 +29,7 @@
     "three-to-cannon": "^4.3.0"
   },
   "devDependencies": {
-    "@babylonjs/core": "^6.28.0",
+    "@babylonjs/core": "^6.28.1",
     "@babylonjs/inspector": "^6.28.1",
     "@tauri-apps/cli": "^1.5.0",
     "@types/react": "^18.2.15",
