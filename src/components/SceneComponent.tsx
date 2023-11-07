@@ -1,19 +1,21 @@
 import { useEffect, useRef } from "react";
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine, Scene, Vector3 } from "@babylonjs/core";
 import "../App.css";
 import * as BABYLON from "@babylonjs/core";
 
 import "@babylonjs/core/Materials/standardMaterial";
 // import { CreateSceneClass } from "../createScene";
 // import { havokModule } from "../externals/havok";
-import { PhysicsShapeBox, PhysicsShapeSphere } from "@babylonjs/core/Physics/v2/physicsShape";
-import { PhysicsBody } from "@babylonjs/core/Physics/v2/physicsBody";
-import { PhysicsMotionType } from "@babylonjs/core/Physics/v2/IPhysicsEnginePlugin";
-import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins/havokPlugin";
+// import { PhysicsShapeBox, PhysicsShapeSphere } from "@babylonjs/core/Physics/v2/physicsShape";
+// import { PhysicsBody } from "@babylonjs/core/Physics/v2/physicsBody";
+// import { PhysicsMotionType } from "@babylonjs/core/Physics/v2/IPhysicsEnginePlugin";
+// import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins/havokPlugin";
+import HavokPhysics from "../../node_modules/@babylonjs/havok";
+import {HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 // import HavokPhysics from "@babylonjs/havok/lib/umd/HavokPhysics_umd";
 // import HavokPhysics from "https://cdn.babylonjs.com/havok/HavokPhysics_umd.js";
 
-
+// const havokInterface = await HavokPhysics();
 
 // async function getInitializedHavok() {
 //   return await HavokPhysics();
@@ -29,9 +31,12 @@ import { HavokPlugin } from "@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 // var hk = new BABYLON.HavokPlugin();
 // const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
-// const hk = await HavokPhysics();
-// const babylonPlugin =  new BABYLON.HavokPlugin(true, hk);
-// scene.enablePhysics(gravity, babylonPlugin);
+const hk = await HavokPhysics();
+const babylonPlugin =  new BABYLON.HavokPlugin(true, hk);
+
+
+// const plugin = new HavokPlugin(undefined /* or the value that fits your usecase */, havokInterface);
+// scene.enablePhysics(undefined /* or the value that fits your usecase, for example: new Vector3(0, -9.81, 0) */, plugin);
 
 export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest }) => {
   const reactCanvas = useRef(null);
@@ -46,6 +51,9 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
 
     const engine = new Engine(canvas, antialias, engineOptions, adaptToDeviceRatio);
     const scene = new Scene(engine, sceneOptions);
+    const gravity = new Vector3(0, -9.81, 0);
+    scene.enablePhysics(gravity, babylonPlugin);
+
     if (scene.isReady()) {
       onSceneReady(scene);
     } else {
