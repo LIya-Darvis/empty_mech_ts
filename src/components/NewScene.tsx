@@ -1,14 +1,30 @@
+/* 
+здесь в пустую сцену из SceneComponent добавляются объекты, 
+но почему то тоже нужно дописывать логику для физики
+*/
+
 import React from "react";
 import { BasicScene } from "./BasicScene";
 import "../App.css";
+import * as BABYLON from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
+import "@babylonjs/core/Materials/standardMaterial";
+import HavokPhysics from "../../node_modules/@babylonjs/havok";
+import {HavokPlugin } from "../../node_modules/@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 
+
+// globalThis.HK = await HavokPhysics();
+
+const havokInstance = await HavokPhysics();
+const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
 let box:any;
 
 export const onSceneReady = (scene:any) => {
+  scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
 
+  console.log(scene);
     // создание камеры
     const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
     camera.setTarget(Vector3.Zero());
@@ -22,11 +38,23 @@ export const onSceneReady = (scene:any) => {
     light_2.intensity = 0.3;
 
     // создание базового кубика
-    box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-    box.position.y = 3;
+    //box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
+    //box.position.y = 3;
 
     // создание платформы
-    MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene); 
+    //MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene); 
+
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene)
+    sphere.position.y = 4;
+
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 10, height: 10}, scene);
+
+
+    var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 1, restitution:0.75}, scene);
+
+    // Create a static box shape.
+    var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+
 };
   
   /**
