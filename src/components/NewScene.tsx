@@ -51,8 +51,6 @@ export const onSceneReady = (scene:any) => {
 
 
     var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 1, restitution:0.75}, scene);
-
-    // Create a static box shape.
     var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
 
 };
