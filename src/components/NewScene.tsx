@@ -3,6 +3,8 @@
 но почему то тоже нужно дописывать логику для физики
 */
 
+// import * as Model from "../assets/";
+
 import React from "react";
 import { BasicScene } from "./BasicScene";
 import "../App.css";
@@ -12,9 +14,11 @@ import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/c
 import "@babylonjs/core/Materials/standardMaterial";
 import HavokPhysics from "../../node_modules/@babylonjs/havok";
 import {HavokPlugin } from "../../node_modules/@babylonjs/core/Physics/v2/Plugins/havokPlugin";
+import '@babylonjs/loaders/OBJ/objFileLoader';
 
 
 // globalThis.HK = await HavokPhysics();
+
 
 const havokInstance = await HavokPhysics();
 const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
@@ -37,17 +41,39 @@ export const onSceneReady = (scene:any) => {
     const light_2 = new HemisphericLight("light", new Vector3(1, 0, 0.5), scene);
     light_2.intensity = 0.3;
 
-    // создание базового кубика
-    //box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-    //box.position.y = 3;
-
-    // создание платформы
-    //MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene); 
-
     var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene)
-    sphere.position.y = 4;
+    sphere.position.y = 27;
 
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 10, height: 10}, scene);
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 45, height: 45}, scene);
+
+    // загрузка модельки
+
+    var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh("", "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
+
+      const com_cube_1 = meshes[0];
+      // com_cube_1.parent = null;
+      // com_cube_1.normalizeToUnitCube();
+
+      const com_cube_2 = meshes[1];
+      const com_cube_3 = meshes[2];
+
+      com_cube_1.position.set(0, 3, 0);
+      com_cube_2.position.set(0, 3, 0);
+      com_cube_3.position.set(0, 3, 0);
+
+
+      // com_cube_1.parent = null;
+
+      console.log(com_cube_1.name , "<- название детали");
+      console.log(meshes.length , "<- количество деталей");
+
+      // const com_cube_1_ph = new BABYLON.PhysicsShapeMesh(com_cube_1, scene);
+      var com_cube_1_aggregate = new BABYLON.PhysicsAggregate(com_cube_1, BABYLON.PhysicsShapeType.MESH, { mass: 2, restitution:0.75}, scene);
+      var com_cube_2_aggregate = new BABYLON.PhysicsAggregate(com_cube_2, BABYLON.PhysicsShapeType.MESH, { mass: 2, restitution:0.75}, scene);
+      var com_cube_3_aggregate = new BABYLON.PhysicsAggregate(com_cube_3, BABYLON.PhysicsShapeType.MESH, { mass: 2, restitution:0.75}, scene);
+
+
+    })
 
 
     var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 1, restitution:0.75}, scene);
