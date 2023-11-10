@@ -9,6 +9,7 @@ import NewScenePage from "./pages/NewScenePage";
 // (alias) function App()
 function App() {
 
+
   console.log("--dfv--df")
 
   // const mainPages: IPage[] = [

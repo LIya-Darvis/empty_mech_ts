@@ -24,8 +24,6 @@ var useV2 = true;
 export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest }) => {
   const reactCanvas = useRef(null);
 
-
-  // set up basic engine and scene
   useEffect(() => {
     const { current: canvas } = reactCanvas;
 
@@ -35,9 +33,10 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
     const engine = new Engine(canvas, antialias, engineOptions, adaptToDeviceRatio);
     const scene = new Scene(engine, sceneOptions);
 
-    scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
+    // scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
 
     if (scene.isReady()) {
+      scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
       onSceneReady(scene);
     } else {
       scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
@@ -57,13 +56,13 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
       window.addEventListener("resize", resize);
     }
 
-    return () => {
-      scene.getEngine().dispose();
+    // return () => {
+      // scene.getEngine().dispose(); 
 
-      if (window) {
-        window.removeEventListener("resize", resize);
-      }
-    };
+      // if (window) {
+      //   window.removeEventListener("resize", resize);
+      // }
+    // };
   }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
 
   return <canvas className="scene_canvas" ref={reactCanvas} {...rest} />;

@@ -12,6 +12,8 @@ body {
   /* text-align: center; */
   justify-content: center;
   text-align: center;
+  overflow-y: hidden;
+
 }
 
 .app_name {
@@ -21,6 +23,8 @@ body {
 }
 
 .container {
+  overflow-y: hidden;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -35,15 +39,16 @@ body {
 
 .canvas {
   background-color: #6da4a0;
-  color: #dc143c;
+  color: #303033;
   height: 100%;
   width: 100%;
 }
 
 .scene_canvas {
-  height: 43em;
+  overflow-y: hidden;
+  height: 48em;
   width: 100%;
-  background-color: #dc143c;
+  background-color: #303033;
 }
 
 .panel {
