@@ -3,11 +3,15 @@
 // import { ICard, IPage } from "./types/types";
 // import PageList from "./components/PageList";
 
+import { useState } from "react";
 import "./App.css";
 import NewScenePage from "./pages/NewScenePage";
 
 // (alias) function App()
 function App() {
+
+  const [newScenePage, setNewScenePage] = useState(NewScenePage);
+    console.log(newScenePage, "<- экз новой сцены в приложении")
 
 
   console.log("--dfv--df")
@@ -37,4 +41,8 @@ function App() {
 
 export default App;
 
+
+// function useState(NewScene: any): [any, any] {
+//   throw new Error("Function not implemented.");
+// }
 

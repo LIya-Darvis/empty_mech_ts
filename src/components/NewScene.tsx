@@ -24,7 +24,7 @@ let objectChildren: ObjectChild[] = []
 const havokInstance = await HavokPhysics();
 const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
-const childMass = 12;
+const childMass = 22;
 
 export const onSceneReady = (scene:any) => {
   scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
@@ -51,31 +51,35 @@ export const onSceneReady = (scene:any) => {
     var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh("", "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
       meshes.forEach(childMesh => {
         const objChild = new ObjectChild(childMesh.id, childMesh.name, childMesh, childMass);
+        objChild.mesh.position.set(0, 4, 0);
+        // objChild.mesh.quaternion.set(0, 4, 0, 0);
         objectChildren.push(objChild);
         objChild.display();
-        const childAggregate = new BABYLON.PhysicsAggregate(objChild.mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.15}, scene);
+        const childAggregate = new BABYLON.PhysicsAggregate(objChild.mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.05}, scene);
       });
 
     })
+    console.log("-gsehtbjjgwegwc");
 
-    var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 3, restitution:0.75}, scene);
+    var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
     var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
 
 };
   
 
-export const onRender = (scene:any) => {
+export const onRender = (scene:any) => { 
   // if (box !== undefined) {
   //   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
   //   // box.rotation.y += (10 / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
   // }
+  console.log("рендер");
 };
 
 export default () => (
-  <div>
-      {/* <h3>场景内容</h3> */}
-      <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="new_canva" />
-  </div>
+  
+      <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
+  
 );
     
+// export default <SceneComponent antialias onSceneReady onRender id="new_canva"/>;
 

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const NewScenePage = () => {
     const [newScene, setNewScene] = useState(NewScene);
-    console.log(newScene, "<- экз новой сцены")
+    console.log(newScene, "<- экз новой сцены на странице")
 
     return (
         <div>
