@@ -1,6 +1,7 @@
 .scene_page {
   color: #d8d8d8;
   display: flex;
+  /* flex-direction: column; */
 }
 
 .scene {

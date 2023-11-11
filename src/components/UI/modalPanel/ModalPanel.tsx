@@ -1,22 +1,21 @@
 import React from 'react';
 import classes from './ModalPanel.module.css';
 
-console.log("modallllll");
+// console.log("modallllll");
 
-const ModalPanel = ({children, ...props}) => {
+const ModalPanel = ({children, visible, setVisible}) => {
 
-    const rootClasses = [classes.myModal]
+    const rootClasses = [classes.modal_panel]
 
-    // if (visible) {
-    //     rootClasses.push(classes.active);
-    // }
+    if (visible) {
+        rootClasses.push(classes.active);
+    }
 
     return (
         
-        <div className={[classes.modal_panel].join(' ')}>
-            <div className={classes.modal_panel_content}>
+        <div className={rootClasses.join(' ')} onClick={() => setVisible(false)}>
+            <div className={classes.modal_panel_content} onClick={(e) => e.stopPropagation()}>
                 {children}
-                {/* панель настроек допустим */}
             </div>
         </div>
     );

@@ -10,18 +10,25 @@ import SettingsPage from "../settingsPage/SettingsPage";
 
 
 const ScenePage = () => {
-    const [newScene, setNewScene] = useState(NewScene);
-    console.log(newScene, "<- экз новой сцены на странице")
+    // const [newScene, setNewScene] = useState(NewScene);
+    // console.log(newScene, "<- экз новой сцены на странице");
+
+    const [modal, setModal] = useState(false);
+
+    // setModal(false);
 
     return (
         <div className={classes.scene_page}>
-            <ModalPanel>
+            
+            <div className={classes.panel}>
+                <PanelButton onClick={() => setModal(true)}>Загрузить</PanelButton>
+                {/* <PanelButton onClick={() => setModal(true)}>Настройки</PanelButton> */}
+            </div>
+
+            <ModalPanel visible={modal} setVisible={setModal}>
                 {/* <div>rggrtgcrhc</div> */}
                 <SettingsPage></SettingsPage>
             </ModalPanel>
-            <div className={classes.panel}>
-                <PanelButton>Загрузить</PanelButton>
-            </div>
             
             <div className={classes.scene}>
             
@@ -32,6 +39,7 @@ const ScenePage = () => {
                 </DisplayPanel>
                 <NewScene/>
             </div>
+            
             
                 
         </div>
