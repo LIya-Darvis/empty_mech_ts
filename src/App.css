@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: rgb(28, 28, 29);
+  background-color: #1c1c1d;
   height: 100%;
   width: 100%;
 
@@ -16,15 +16,14 @@ body {
 
 }
 
-.app_name {
+/* .app_name {
   color: #d8d8d8;
   align-self: center;
   justify-self: center;
-}
+} */
 
-.container {
+/* .container {
   overflow-y: hidden;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -35,53 +34,19 @@ body {
   color: #d8d8d8;
   height: auto;
   width: 100%;
-}
+} */
 
-.canvas {
-  background-color: #6da4a0;
+/* .canvas {
+  background-color: #00ffee;
   color: #303033;
   height: 100%;
   width: 100%;
-}
+} */
 
 .scene_canvas {
-  overflow-y: hidden;
-  height: 48em;
+  height: 100%;
   width: 100%;
-  background-color: #303033;
+  background-color: #1c1c1d;
 }
 
-.panel {
-  height: 2em;
-  background-color: #58585a;
-  /* opacity: 60%; */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0em 1em;
-}
-
-.panel_button {
-  padding: 0.2em 0.5em;
-  margin: 0em 0.2em;
-  background-color: #d8d8d8;
-  color: #1b1b1b;
-}
-
-.page_list_container {
-  display: flex;
-  flex-direction: row;
-}
-
-.card {
-  width: 280px;
-  height: 350px;
-  background-color: #58585a;
-  margin: 2em;
-}
-
-.card_text {
-  color: #d8d8d8;
-  font-size: 1.6em;
-}
 

@@ -1,0 +1,36 @@
+.modal_panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    /* visibility: hidden; */
+    background: rgba(0,0,0, 0.5);
+
+    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    justify-self: center;
+}
+
+.modal_panel_content {
+    padding: 2em;
+    background-color: #1c1c1d;
+    border-radius: 3vh;
+    min-width: 20vh;
+    min-height: 15vh;
+}
+
+.modal_panel:active {
+    z-index: 5;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -59,7 +59,6 @@ export const onSceneReady = (scene:any) => {
       });
 
     })
-    console.log("-gsehtbjjgwegwc");
 
     var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
     var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
