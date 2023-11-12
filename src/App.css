@@ -16,33 +16,6 @@ body {
 
 }
 
-/* .app_name {
-  color: #d8d8d8;
-  align-self: center;
-  justify-self: center;
-} */
-
-/* .container {
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  justify-self: center;
-  align-self: center;
-  background-color: #1b1b1b;
-  color: #d8d8d8;
-  height: auto;
-  width: 100%;
-} */
-
-/* .canvas {
-  background-color: #00ffee;
-  color: #303033;
-  height: 100%;
-  width: 100%;
-} */
-
 .scene_canvas {
   height: 100%;
   width: 100%;

@@ -1,6 +1,7 @@
 import React, { FC } from "react";
+import classes from './SettingsPage.module.css';
 
-const NewScenePage = () => {
+const SettingsPage = () => {
     return (
         <div className="settings_page">
             <h1>Settings</h1>
@@ -10,4 +11,4 @@ const NewScenePage = () => {
     );
 };
 
-export default NewScenePage;
+export default SettingsPage;

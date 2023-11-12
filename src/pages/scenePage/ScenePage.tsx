@@ -1,12 +1,12 @@
-// import React, { FC } from "react";
+import React, { FC } from "react";
 import NewScene from "../../components/NewScene";
-// import "../../App.css";
 import classes from './ScenePage.module.css';
 import { useState } from "react";
 import PanelButton from "../../components/UI/panelButton/PanelButton";
 import DisplayPanel from "../../components/UI/displayPanel/DisplayPanel";
 import ModalPanel from "../../components/UI/modalPanel/ModalPanel";
-import SettingsPage from "../settingsPage/SettingsPage";
+// import SettingsPage from "../settingsPage/SettingsPage";
+import LoadingPage from "../loadingPage/LoadingPage";
 
 
 const ScenePage = () => {
@@ -27,7 +27,7 @@ const ScenePage = () => {
 
             <ModalPanel visible={modal} setVisible={setModal}>
                 {/* <div>rggrtgcrhc</div> */}
-                <SettingsPage></SettingsPage>
+                <LoadingPage></LoadingPage>
             </ModalPanel>
             
             <div className={classes.scene}>
