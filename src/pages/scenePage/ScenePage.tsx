@@ -13,22 +13,26 @@ const ScenePage = () => {
     // const [newScene, setNewScene] = useState(NewScene);
     // console.log(newScene, "<- экз новой сцены на странице");
 
-    const [modal, setModal] = useState(false);
+    const [open, setOpen] = useState(false);
 
-    // setModal(false);
+    // setOpen(false);
 
     return (
         <div className={classes.scene_page}>
             
             <div className={classes.panel}>
-                <PanelButton onClick={() => setModal(true)}>Загрузить</PanelButton>
-                {/* <PanelButton onClick={() => setModal(true)}>Настройки</PanelButton> */}
+                <PanelButton onClick={() => setOpen(true)}>Загрузить</PanelButton>
+                {/* <PanelButton onClick={() => setOpen(true)}>Настройки</PanelButton> */}
             </div>
 
-            <ModalPanel visible={modal} setVisible={setModal}>
-                {/* <div>rggrtgcrhc</div> */}
-                <LoadingPage></LoadingPage>
-            </ModalPanel>
+            { open && (
+                <ModalPanel open={open} setOpen={setOpen}>
+                    {/* <div>rggrtgcrhc</div> */}
+                    <LoadingPage></LoadingPage>
+                </ModalPanel>
+            )}
+
+            
             
             <div className={classes.scene}>
             

@@ -1,6 +1,5 @@
 .modal_panel {
     position: fixed;
-    visibility: hidden;
     background: rgba(0,0,0, 0.5);
     top: 0;
     bottom: 0;
@@ -21,7 +20,8 @@
     min-height: 15vh;
 }
 
-.modal_panel.active {
+
+/* .modal_panel.active {
     visibility: visible;
     top: 0;
     bottom: 0;
@@ -33,4 +33,4 @@
     justify-content: center;
     align-items: center;
 
-}
+} */

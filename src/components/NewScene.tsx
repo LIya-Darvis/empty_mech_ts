@@ -16,6 +16,7 @@ import HavokPhysics from "../../node_modules/@babylonjs/havok";
 import {HavokPlugin } from "../../node_modules/@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 import '@babylonjs/loaders/OBJ/objFileLoader';
 import { ObjectChild } from "./ObjectChild";
+import { NewMesh } from "./NewMesh";
 
 // globalThis.HK = await HavokPhysics();
 
@@ -49,6 +50,7 @@ export const onSceneReady = (scene:any) => {
 
     // загрузка модельки и физики
     var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh("", "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
+      
       meshes.forEach(childMesh => {
         const objChild = new ObjectChild(childMesh.id, childMesh.name, childMesh, childMass);
         objChild.mesh.position.set(0, 4, 0);
@@ -60,7 +62,7 @@ export const onSceneReady = (scene:any) => {
 
     })
 
-    var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
+    //var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
     var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
 
 };
@@ -74,9 +76,14 @@ export const onRender = (scene:any) => {
   console.log("рендер");
 };
 
+export const onLoading = (scene: any, newMesh: NewMesh) => {
+  newMesh.name = "mesh__name";
+  console.log(newMesh.name, "-----");
+};
+
 export default () => (
   
-      <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
+  <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} onLoading={onLoading} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
   
 );
     

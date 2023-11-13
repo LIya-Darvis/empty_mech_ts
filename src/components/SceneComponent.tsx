@@ -7,7 +7,6 @@ import { Engine, Scene, Vector3 } from "@babylonjs/core";
 import "../App.css";
 import * as BABYLON from "@babylonjs/core";
 
-
 import HavokPhysics from "../../node_modules/@babylonjs/havok";
 import {HavokPlugin } from "../../node_modules/@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 import { AmmoJSPlugin } from "../../node_modules/@babylonjs/core/Physics/Plugins/ammoJSPlugin";
@@ -21,7 +20,7 @@ var useV2 = true;
 
 
 
-export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest }) => {
+export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading, ...rest }) => {
   const reactCanvas = useRef(null);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         window.removeEventListener("resize", resize); 
       }
     };
-  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
+  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading]);
 
   return <canvas className="scene_canvas" ref={reactCanvas} {...rest} />;
 };
