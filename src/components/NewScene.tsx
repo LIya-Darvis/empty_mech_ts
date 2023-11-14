@@ -9,6 +9,7 @@ import React from "react";
 import { BasicScene } from "./BasicScene";
 import "../App.css";
 import * as BABYLON from "@babylonjs/core";
+// import { Engine, Scene, Vector3 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
 import "@babylonjs/core/Materials/standardMaterial";
@@ -27,65 +28,136 @@ const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
 const childMass = 22;
 
-export const onSceneReady = (scene:any) => {
-  scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
+// export const onSceneReady = (scene:any, meshName:string) => {
+//   scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
 
-  // console.log(scene);
-    // создание камеры
-    const camera = new FreeCamera("camera1", new Vector3(0, 15, -20), scene);
-    camera.setTarget(Vector3.Zero());
-    const canvas = scene.getEngine().getRenderingCanvas();
-    camera.attachControl(canvas, true);
+//   // console.log(scene);
+//     // создание камеры
+//     const camera = new FreeCamera("camera1", new Vector3(0, 15, -20), scene);
+//     camera.setTarget(Vector3.Zero());
+//     const canvas = scene.getEngine().getRenderingCanvas();
+//     camera.attachControl(canvas, true);
 
-    // настройка освещения
-    const light_1 = new HemisphericLight("light", new Vector3(0.6, 1, 0), scene);
-    light_1.intensity = 0.7;
-    const light_2 = new HemisphericLight("light", new Vector3(1, 0, 1.5), scene);
-    light_2.intensity = 0.3;
+//     // настройка освещения
+//     const light_1 = new HemisphericLight("light", new Vector3(0.6, 1, 0), scene);
+//     light_1.intensity = 0.7;
+//     const light_2 = new HemisphericLight("light", new Vector3(1, 0, 1.5), scene);
+//     light_2.intensity = 0.3;
 
-    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene)
-    sphere.position.y = 27;
+//     var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene)
+//     sphere.position.y = 27;
 
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 45, height: 45}, scene);
+//     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 45, height: 45}, scene);
 
-    // загрузка модельки и физики
-    var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh("", "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
+//     console.log("вывод где нужно ", meshName);
+
+//     // загрузка модельки и физики
+//     var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh(meshName, "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
       
-      meshes.forEach(childMesh => {
-        const objChild = new ObjectChild(childMesh.id, childMesh.name, childMesh, childMass);
-        objChild.mesh.position.set(0, 4, 0);
-        // objChild.mesh.quaternion.set(0, 4, 0, 0);
-        objectChildren.push(objChild);
-        objChild.display();
-        const childAggregate = new BABYLON.PhysicsAggregate(objChild.mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.05}, scene);
-      });
+//       meshes.forEach(childMesh => {
+//         const objChild = new ObjectChild(childMesh.id, childMesh.name, childMesh, childMass);
+//         objChild.mesh.position.set(0, 4, 0);
+//         // objChild.mesh.quaternion.set(0, 4, 0, 0);
+//         objectChildren.push(objChild);
+//         objChild.display();
+//         const childAggregate = new BABYLON.PhysicsAggregate(objChild.mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.05}, scene);
+//       });
 
-    })
+//     })
 
-    //var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
-    var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+//     //var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
+//     var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
 
-};
+// };
   
 
-export const onRender = (scene:any) => { 
-  // if (box !== undefined) {
-  //   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  //   // box.rotation.y += (10 / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
-  // }
-  console.log("рендер");
-};
+// export const onRender = (scene:any) => { 
+//   // if (box !== undefined) {
+//   //   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+//   //   // box.rotation.y += (10 / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
+//   // }
+//   console.log("рендер");
+// };
 
-export const onLoading = (scene: any, newMesh: NewMesh) => {
-  newMesh.name = "mesh__name";
-  console.log(newMesh.name, "-----");
-};
+// export const onLoading = (meshName: string) => {
+//   console.log(meshName, "-----");
+// };
 
-export default () => (
+
+
+
+// разворачиваем новую сцену
+
+
+export const NewScene = ({meshName}) => {
+
+  const onSceneReady = (scene:any) => {
+    scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
   
-  <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} onLoading={onLoading} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
+    // console.log(scene);
+      // создание камеры
+      const camera = new FreeCamera("camera1", new Vector3(0, 15, -20), scene);
+      camera.setTarget(Vector3.Zero());
+      const canvas = scene.getEngine().getRenderingCanvas();
+      camera.attachControl(canvas, true);
   
-);
+      // настройка освещения
+      const light_1 = new HemisphericLight("light", new Vector3(0.6, 1, 0), scene);
+      light_1.intensity = 0.7;
+      const light_2 = new HemisphericLight("light", new Vector3(1, 0, 1.5), scene);
+      light_2.intensity = 0.3;
+  
+      var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 2, segments: 32}, scene)
+      sphere.position.y = 27;
+  
+      var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 45, height: 45}, scene);
+  
+      console.log("вывод где нужно", meshName);
+  
+      // загрузка модельки и физики
+      var composite_cube_mesh = BABYLON.SceneLoader.ImportMesh("", "./src/assets/", "composite_cube_with_center.obj", scene, (meshes) => {
+        
+        meshes.forEach(childMesh => {
+          const objChild = new ObjectChild(childMesh.id, childMesh.name, childMesh, childMass);
+          objChild.mesh.position.set(0, 4, 0);
+          // objChild.mesh.quaternion.set(0, 4, 0, 0);
+          objectChildren.push(objChild);
+          objChild.display();
+          const childAggregate = new BABYLON.PhysicsAggregate(objChild.mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.05}, scene);
+        });
+  
+      })
+  
+      //var sphereAggregate = new BABYLON.PhysicsAggregate(sphere, BABYLON.PhysicsShapeType.SPHERE, { mass: 5, restitution: 0.25}, scene);
+      var groundAggregate = new BABYLON.PhysicsAggregate(ground, BABYLON.PhysicsShapeType.BOX, { mass: 0 }, scene);
+  
+  };
+
+  const onRender = (scene:any) => { 
+    // if (box !== undefined) {
+    //   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+    //   // box.rotation.y += (10 / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
+    // }
+    console.log("рендер");
+  };
+
+  const onLoading = (meshName: string) => {
+    console.log(meshName, "-----");
+  };
+
+  return (
+    <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} onLoading={onLoading} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
+  )
+
+} 
+
+export default NewScene;
+
+// export default () => (
+  
+//   <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} onLoading={onLoading} id="new_canva" engineOptions={undefined} adaptToDeviceRatio={undefined} sceneOptions={undefined} />
+  
+// );
     
 // export default <SceneComponent antialias onSceneReady onRender id="new_canva"/>;
 
