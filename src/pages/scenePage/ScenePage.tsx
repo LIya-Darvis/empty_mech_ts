@@ -15,8 +15,6 @@ const ScenePage = () => {
 
     const [open, setOpen] = useState(false);
 
-    // setOpen(false);
-
     return (
         <div className={classes.scene_page}>
             
@@ -30,7 +28,7 @@ const ScenePage = () => {
                     {/* <div>rggrtgcrhc</div> */}
                     <LoadingPage></LoadingPage>
                 </ModalPanel>
-            )}
+            )} 
 
             
             

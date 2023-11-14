@@ -20,7 +20,7 @@ var useV2 = true;
 
 
 
-export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading, ...rest }) => {
+export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest }) => {
   const reactCanvas = useRef(null);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         window.removeEventListener("resize", resize); 
       }
     };
-  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading]);
+  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
 
   return <canvas className="scene_canvas" ref={reactCanvas} {...rest} />;
 };
