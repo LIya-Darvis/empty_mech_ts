@@ -20,7 +20,7 @@ var useV2 = true;
 
 
 
-export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest }) => {
+export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading, ...rest }) => {
   const reactCanvas = useRef(null);
 
   useEffect(() => {
@@ -33,6 +33,12 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
     const scene = new Scene(engine, sceneOptions);
 
     scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
+
+    if (onLoading) {
+      console.log(onLoading, "а это уже внутри ядра компонента");
+    } else {
+      console.log("=====");
+    }
 
     if (scene.isReady()) {
       // scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
@@ -62,7 +68,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         window.removeEventListener("resize", resize); 
       }
     };
-  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
+  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading]);
 
   return <canvas className="scene_canvas" ref={reactCanvas} {...rest} />;
 };
