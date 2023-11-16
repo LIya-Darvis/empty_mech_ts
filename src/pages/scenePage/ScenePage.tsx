@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import NewScene from "../../components/NewScene";
 import classes from './ScenePage.module.css';
 import { useState } from "react";
@@ -15,6 +15,13 @@ const ScenePage = () => {
 
     const [open, setOpen] = useState(false);
 
+    // useEffect(() => {
+    //     <ModalPanel open={open} setOpen={setOpen}>
+    //         {/* <div>rggrtgcrhc</div> */}
+    //         <LoadingPage></LoadingPage>
+    //     </ModalPanel>
+    // })
+
     return (
         <div className={classes.scene_page}>
             
@@ -24,13 +31,13 @@ const ScenePage = () => {
             </div>
 
             { open && (
+                
                 <ModalPanel open={open} setOpen={setOpen}>
                     {/* <div>rggrtgcrhc</div> */}
                     <LoadingPage></LoadingPage>
                 </ModalPanel>
-            )} 
+            )}
 
-            
             
             <div className={classes.scene}>
             
@@ -39,7 +46,7 @@ const ScenePage = () => {
                     <div>¯\_(ツ)_/¯</div>
                     <div>obj model</div>
                 </DisplayPanel>
-                <NewScene/>
+                <NewScene />
             </div>
             
             

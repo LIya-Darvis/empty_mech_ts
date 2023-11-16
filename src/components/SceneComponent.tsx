@@ -3,7 +3,7 @@
 */
 
 import { useEffect, useRef } from "react";
-import { Engine, Scene, Vector3 } from "@babylonjs/core";
+import { Engine, FreeCamera, Scene, Vector3 } from "@babylonjs/core";
 import "../App.css";
 import * as BABYLON from "@babylonjs/core";
 
@@ -14,34 +14,49 @@ import { AmmoJSPlugin } from "../../node_modules/@babylonjs/core/Physics/Plugins
 // globalThis.HK = await HavokPhysics();
 
 const havokInstance = await HavokPhysics();
-const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
+// const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
+const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
 var useV2 = true;
 
 
 
-export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading, ...rest }) => {
+export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, loadedModel, ...rest }) => {
   const reactCanvas = useRef(null);
+
+  const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
+  // const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
   useEffect(() => {
     const { current: canvas } = reactCanvas;
 
+    console.log(loadedModel);
 
     if (!canvas) return;
 
     const engine = new Engine(canvas, antialias, engineOptions, adaptToDeviceRatio);
     const scene = new Scene(engine, sceneOptions);
 
-    scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
+    scene.enablePhysics(gravity, havokPlugin);
 
-    if (onLoading) {
-      console.log(onLoading, "а это уже внутри ядра компонента");
+    
+
+    if (loadedModel === null) {
+      console.log("ничего страшного");
     } else {
-      console.log("=====");
+      console.log("протагонист этого мира:", loadedModel);
     }
 
     if (scene.isReady()) {
-      // scene.enablePhysics(new BABYLON.Vector3(0, -9.8, 0), havokPlugin);
+      
+      // if (scene.enablePhysics.length <= 0) {
+      //   console.log("физическая настройка мира незавершена");
+      // } else {
+      //   scene.enablePhysics(gravity, havokPlugin);
+      //   onSceneReady(scene);
+      // };
+
+      scene.enablePhysics(gravity, havokPlugin);
       onSceneReady(scene);
     } else {
       scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
@@ -49,6 +64,8 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
 
     engine.runRenderLoop(() => {
       if (typeof onRender === "function") onRender(scene);
+      const camera = new FreeCamera("camera1", new Vector3(0, 15, -20), scene);
+      camera.setTarget(Vector3.Zero());
       scene.render();
     });
 
@@ -68,7 +85,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         window.removeEventListener("resize", resize); 
       }
     };
-  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, onLoading]);
+  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, loadedModel]);
 
   return <canvas className="scene_canvas" ref={reactCanvas} {...rest} />;
 };
