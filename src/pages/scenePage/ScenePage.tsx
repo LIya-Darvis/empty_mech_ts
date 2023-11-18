@@ -46,7 +46,7 @@ const ScenePage = () => {
                     <div>¯\_(ツ)_/¯</div>
                     <div>obj model</div>
                 </DisplayPanel>
-                <NewScene />
+                <NewScene/>
             </div>
             
             

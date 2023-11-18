@@ -22,12 +22,13 @@ var useV2 = true;
 
 
 export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, loadedModel, ...rest }) => {
-  const reactCanvas = useRef(null);
+  const reactCanvas = useRef();
 
   const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
   // const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
   useEffect(() => {
+    console.log(reactCanvas);
     const { current: canvas } = reactCanvas;
 
     console.log(loadedModel);

@@ -8,10 +8,16 @@ import "./App.css";
 import ScenePage from "./pages/scenePage/ScenePage";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import SettingsPage from "./pages/settingsPage/SettingsPage";
-import StartPage from "./pages/startPage/StartPage";
+import React from "react";
 
 function App() {
 
+  // const { gl } = useThree()
+
+  //   React.useEffect(() => {
+  //     console.log(gl.domElement) // will show me the `<canvas>` dom element.
+  //   }, [])
+    
   // const [newScenePage, setNewScenePage] = useState(NewScenePage);
   //   console.log(newScenePage, "<- экз новой сцены в приложении")
 
@@ -27,4 +33,8 @@ function App() {
 
 export default App;
 
+
+function useThree(): { gl: any; } {
+  throw new Error("Function not implemented.");
+}
 
