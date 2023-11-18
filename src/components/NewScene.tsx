@@ -24,37 +24,39 @@ const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
 const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
-interface phAgg {
+interface modelLoadingProps {
+  name: string,
+  rootUrl: string,
+  sceneFilename: string,
+  position?: Vector3
+};
 
-} 
-
-
-export const LoadingBox = () => {
+function LoadingBox () {
 
   return (
     <box name="qwe" position={new Vector3(0, 10, 0)}>
         <physicsAggregate type={BABYLON.PhysicsShapeType.BOX} _options={{mass: 3, restitution: 0.2}} />
-        {/* <physicsImpostor type={BABYLON.PhysicsImpostor.BoxImpostor} _options={{mass: 4, restitution: 0.6}}/> */}
     </box> 
   )
 }
 
-export const LoadingModel = () => {
+function LoadingModel (rootUrl: string, sceneFilename: any, name: string, position?: Vector3) {
 
-  // const [model_name, set_model_name] = useState("old_model_name");
-  const scene = useScene()
+  const scene = useScene();
+  
 
   return (
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
 
-      <Model rootUrl={"./src/assets/"} sceneFilename={"composite_cube_with_center.obj"} 
-            name={"model_name"} position={new Vector3(0, 2, 0)}
+      <Model rootUrl={"./src/assets/"} sceneFilename={"chains.obj"} 
+            name={name} position={new Vector3(0, 3, 0)}
 
         onModelLoaded={
         (loadedModel) => {
-          // console.log(loadedModel);
+          console.log(name);
+          console.log(sceneFilename);
+
           const meshes_ar = loadedModel.meshes;
-          console.log(meshes_ar);
 
           meshes_ar?.forEach(mesh => {
             console.log(mesh);
@@ -62,45 +64,28 @@ export const LoadingModel = () => {
             console.log(mesh_ph_aggr)
           })
 
-          // избавляемся от привязки координат к родительскому мешу
-          // let modelParent = loadedModel.meshes[0];
-          // loadedModel = modelParent.getChildMeshes()[0];
-        
-          // meshes_ar?.forEach(loaded_mesh => {
-          //   let mesh = meshes_ar?.find((m) => m.id === loaded_mesh.id);
-          //   // const mesh = loaded_mesh;
-          //   console.log(mesh.name);
-
-          //   mesh.parent = null;
-
-            // mesh.dispose();
-            // const mesh_ph_aggr = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH, { mass: childMass, restitution: 0.05}, scene)
-            
-            // mesh.physicsImpostor = new PhysicsImpostor(
-            //   mesh,
-            //   BABYLON.PhysicsImpostor.MeshImpostor,
-            //   { mass: 4 }
-            // );
-
-            // mesh?.physicsBody = new BABYLON.PhysicsBody()
-            // console.log(mesh.physicsImpostor);
-          // });
-          
         }}
       />
-
-
-         {/* <physicsAggregate type={BABYLON.PhysicsShapeType.MESH} _options={{mass: 3, restitution: 0.2}}/>
-         <standardMaterial name={"model_standart_met"}
-                    diffuseColor={Color3.Yellow()}/>  */}
-     
-      
     </Suspense>
     
   )
 }
 
-export  const  NewScene = () => {
+export const NewScene = () => {
+
+  const defaultModels = [
+    {rootUrl: "./src/assets/",
+      sceneFilename: "composite_cube_with_center.obj",
+      name: "cute_name_(～￣▽￣)～",
+    },
+    {rootUrl: "./src/assets/",
+    sceneFilename: "chains.obj",
+    name: "cool_name_( ﹁ ﹁ ) ~→",
+    }
+  ];
+
+  console.log(defaultModels[0].rootUrl);
+  console.log(defaultModels[0].sceneFilename);
 
     return(
       <div className="scene_canvas">
@@ -135,7 +120,9 @@ export  const  NewScene = () => {
           />
 
 
-          <LoadingModel/>
+          <LoadingModel rootUrl={"./src/assets/"} 
+                  sceneFilename={defaultModels[0].sceneFilename} 
+                  name={defaultModels[0].name}/>
           <LoadingBox/>
 
 
