@@ -10,30 +10,20 @@ import LoadingPage from "../loadingPage/LoadingPage";
 
 
 const ScenePage = () => {
-    // const [newScene, setNewScene] = useState(NewScene);
-    // console.log(newScene, "<- экз новой сцены на странице");
 
     const [open, setOpen] = useState(false);
 
-    // useEffect(() => {
-    //     <ModalPanel open={open} setOpen={setOpen}>
-    //         {/* <div>rggrtgcrhc</div> */}
-    //         <LoadingPage></LoadingPage>
-    //     </ModalPanel>
-    // })
 
     return (
         <div className={classes.scene_page}>
             
             <div className={classes.panel}>
                 <PanelButton onClick={() => setOpen(true)}>Загрузить</PanelButton>
-                {/* <PanelButton onClick={() => setOpen(true)}>Настройки</PanelButton> */}
             </div>
 
             { open && (
                 
                 <ModalPanel open={open} setOpen={setOpen}>
-                    {/* <div>rggrtgcrhc</div> */}
                     <LoadingPage></LoadingPage>
                 </ModalPanel>
             )}

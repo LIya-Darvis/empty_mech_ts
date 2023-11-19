@@ -10,6 +10,10 @@
     font-size: 0.9em;
 }
 
+.panel_button:hover {
+    background-color: #2d2d2f;
+}
+
 .panel_button:active {
     background-color: #2d2d2f;
 }

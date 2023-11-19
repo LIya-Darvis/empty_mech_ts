@@ -9,13 +9,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .modal_panel_content {
-    padding: 2em;
+    padding: 4vh;
     background-color: #1c1c1d;
-    border-radius: 3vh;
-    min-width: 20vh;
-    min-height: 15vh;
+    border-radius: 2vh;
+    min-width: 40vh;
+    min-height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -1,0 +1,21 @@
+
+
+.load_button {
+    margin: 3vh 0vh;
+    padding: 0.5em 1.2em;
+    height: 100%;
+    background-color: #2d2d2f;
+    color: #d8d8d8;
+    border: #d8d8d8 0px solid;
+    cursor: pointer;
+    font-size: 0.9em;
+    width: 100%;
+}
+
+.load_button:active {
+    background-color: #373739;
+}
+
+.load_button::before {
+    background-color: #2d2d2f;
+}

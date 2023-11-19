@@ -40,20 +40,9 @@ function LoadingBox () {
   )
 }
 
-export const LoadingModel = (props) => {
-
-  
+export const LoadingModel = (props:any) => {
 
   const scene = useScene();
-  const engine = useEngine();
-
-  // BABYLON.SceneLoader.Append(
-  //   rootUrl,
-  //   sceneFilename,
-  //   scene
-  // );
-  
-  const _this = this
 
   return (
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
@@ -94,9 +83,6 @@ export const NewScene = () => {
     }
   ];
 
-  // console.log(defaultModels[0].rootUrl);
-  // console.log(defaultModels[0].sceneFilename);
-
     return(
       <div className="scene_canvas">
       <Engine antialias={true} adaptToDeviceRatio={true} canvasId="new_scene">
@@ -129,15 +115,12 @@ export const NewScene = () => {
             shadowMaxZ={2500}
           />
 
-
           <LoadingModel loadingModels={{rootUrl: defaultModels[0].rootUrl, 
                                       sceneFilename: defaultModels[0].sceneFilename, 
                                       name: defaultModels[0].name}}/>
           <LoadingModel loadingModels={{rootUrl: defaultModels[1].rootUrl, 
                                       sceneFilename: defaultModels[1].sceneFilename, 
                                       name: defaultModels[1].name}}/>
-          {/* <LoadingBox/> */}
-
 
           <ground
             name="ground1"

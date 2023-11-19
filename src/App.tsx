@@ -27,7 +27,7 @@ function App() {
   пока не хочу
   */
   return (
-          <ScenePage />
+    <ScenePage />
   );
 }
 
