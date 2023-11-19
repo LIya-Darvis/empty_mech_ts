@@ -5,7 +5,7 @@
 
 import React, { Suspense, useRef, useState } from "react";
 import "../App.css";
-import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useHover, useScene } from "react-babylonjs";
+import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
 import { Vector3, Color3, PhysicsImpostor } from "@babylonjs/core";
 import * as BABYLON from "@babylonjs/core";
 import HavokPhysics from "../../node_modules/@babylonjs/havok";
@@ -40,21 +40,31 @@ function LoadingBox () {
   )
 }
 
-function LoadingModel (rootUrl: string, sceneFilename: any, name: string, position?: Vector3) {
+export const LoadingModel = (props) => {
+
+  
 
   const scene = useScene();
+  const engine = useEngine();
+
+  // BABYLON.SceneLoader.Append(
+  //   rootUrl,
+  //   sceneFilename,
+  //   scene
+  // );
   
+  const _this = this
 
   return (
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
 
-      <Model rootUrl={"./src/assets/"} sceneFilename={"chains.obj"} 
-            name={name} position={new Vector3(0, 3, 0)}
+      <Model key={"loadingModel"} rootUrl={props.loadingModels.rootUrl} sceneFilename={props.loadingModels.sceneFilename} 
+            name={props.loadingModels.name} position={new Vector3(0, 3, 0)}
 
         onModelLoaded={
         (loadedModel) => {
-          console.log(name);
-          console.log(sceneFilename);
+          console.log(props.loadingModels.name);
+          console.log(props.loadingModels.sceneFilename);
 
           const meshes_ar = loadedModel.meshes;
 
@@ -84,8 +94,8 @@ export const NewScene = () => {
     }
   ];
 
-  console.log(defaultModels[0].rootUrl);
-  console.log(defaultModels[0].sceneFilename);
+  // console.log(defaultModels[0].rootUrl);
+  // console.log(defaultModels[0].sceneFilename);
 
     return(
       <div className="scene_canvas">
@@ -120,10 +130,13 @@ export const NewScene = () => {
           />
 
 
-          <LoadingModel rootUrl={"./src/assets/"} 
-                  sceneFilename={defaultModels[0].sceneFilename} 
-                  name={defaultModels[0].name}/>
-          <LoadingBox/>
+          <LoadingModel loadingModels={{rootUrl: defaultModels[0].rootUrl, 
+                                      sceneFilename: defaultModels[0].sceneFilename, 
+                                      name: defaultModels[0].name}}/>
+          <LoadingModel loadingModels={{rootUrl: defaultModels[1].rootUrl, 
+                                      sceneFilename: defaultModels[1].sceneFilename, 
+                                      name: defaultModels[1].name}}/>
+          {/* <LoadingBox/> */}
 
 
           <ground
