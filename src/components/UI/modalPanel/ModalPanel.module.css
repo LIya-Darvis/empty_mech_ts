@@ -12,11 +12,14 @@
 }
 
 .modal_panel_content {
-    padding: 4vh;
+    /* overflow-y: scroll; */
+    padding: 1em 5em;
     background-color: #1c1c1d;
     border-radius: 2vh;
     min-width: 40vh;
     min-height: 25vh;
+    max-width: 120vh;
+    max-height: 65vh;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -80,6 +80,10 @@ export const NewScene = () => {
     {rootUrl: "./src/assets/",
     sceneFilename: "chains.obj",
     name: "cool_name_( ﹁ ﹁ ) ~→",
+    },
+    {rootUrl: "./src/assets/",
+    sceneFilename: "test.obj",
+    name: "hmmmmm_(⌐■_■)",
     }
   ];
 
@@ -115,12 +119,15 @@ export const NewScene = () => {
             shadowMaxZ={2500}
           />
 
-          <LoadingModel loadingModels={{rootUrl: defaultModels[0].rootUrl, 
+          {/* <LoadingModel loadingModels={{rootUrl: defaultModels[0].rootUrl, 
                                       sceneFilename: defaultModels[0].sceneFilename, 
-                                      name: defaultModels[0].name}}/>
-          <LoadingModel loadingModels={{rootUrl: defaultModels[1].rootUrl, 
+                                      name: defaultModels[0].name}}/> */}
+          {/* <LoadingModel loadingModels={{rootUrl: defaultModels[1].rootUrl, 
                                       sceneFilename: defaultModels[1].sceneFilename, 
-                                      name: defaultModels[1].name}}/>
+                                      name: defaultModels[1].name}}/> */}
+          <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl, 
+                                      sceneFilename: defaultModels[2].sceneFilename, 
+                                      name: defaultModels[2].name}}/>
 
           <ground
             name="ground1"
