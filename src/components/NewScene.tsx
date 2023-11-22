@@ -41,7 +41,6 @@ function LoadingBox () {
 }
 
 export const LoadingModel = (props:any) => {
-
   const scene = useScene();
 
   return (

@@ -1,8 +1,24 @@
 import React, { FC, useContext, useState } from "react";
 import classes from './LoadingPage.module.css';
 import { useFilePicker } from 'use-file-picker';
-// import * as fs from 'node:fs';
-import * as fs from '../../../node_modules/fs/package.json';
+// import * as fs from 'fs';
+// import * as fs from '../../../node_modules/fs/package.json';
+// import fs from '../../../node_modules/vite-plugin-fs/package.json';
+// import fs from 'vite-fs';
+// import * as fs from 'fs';
+
+import {copyFile, BaseDirectory} from '@tauri-apps/api/fs';
+
+
+// import Vue from '../../../node_modules/@vitejs/plugin-vue'
+// import ViteFS from 'vite-fs'
+
+// export default {
+//   plugins: [
+//     Vue(),
+//     ViteFS()
+//   ]
+// }
 
 // import {ModelLoadingContext} from '../../pages/scenePage/ScenePage';
 // import {file} from '../../assets/test.obj'
@@ -24,17 +40,21 @@ const LoadingPage = () => {
         filesContent.map((file) => {
             file_content = file.content
         })
-        const fs = require('fs');
+        // const fs = require('fs');
         //  fs.writeFileSync("../../assets/test.txt", file_content)
 
         // // fs.writeFile("../../assets/test.obj", file_content)
 
         // const write_result = fs.readFileSync("../../assets/test.txt")
-        const file = fs.readFileSync('../../assets/test.txt');
-        console.log("что то выводим ???\n", file)
+        // var file = fs.readFile('../../assets/test.txt');
+        // console.log("что то выводим ???\n", file)
+        
+        // console.log("что то важное?? ", fs);
         
         console.log("чего мы так долго добивались ✨✨: \n", file_content);
     }
+
+    console.log(copyFile);
 
 
     

@@ -12,6 +12,8 @@
   "dependencies": {
     "@babylonjs/havok": "^1.3.0",
     "@babylonjs/loaders": "^6.30.0",
+    "@stenway/reliabletxt": "^1.1.0",
+    "@stenway/reliabletxt-io": "^1.1.0",
     "@tauri-apps/api": "^1.5.0",
     "@types/react-router-dom": "^5.3.3",
     "ammo.js": "github:kripken/ammo.js",
@@ -32,7 +34,9 @@
     "sass": "^1.69.5",
     "three": "^0.157.0",
     "three-to-cannon": "^4.3.0",
-    "use-file-picker": "^2.1.1"
+    "use-file-picker": "^2.1.1",
+    "vite-fs": "^0.0.2",
+    "vite-plugin-fs": "^1.0.0"
   },
   "devDependencies": {
     "@babylonjs/core": "^6.30.0",
@@ -43,7 +47,11 @@
     "@types/react-dom": "^18.2.7",
     "@types/three": "^0.157.2",
     "@vitejs/plugin-react": "^4.0.3",
+    "fs": "^0.0.1-security",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "ts-loader": "^9.5.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.4",
     "webpack": "^5.89.0",
