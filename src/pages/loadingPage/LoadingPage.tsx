@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import classes from './LoadingPage.module.css';
 import { useFilePicker } from 'use-file-picker';
 // import * as fs from 'fs';
@@ -7,7 +7,8 @@ import { useFilePicker } from 'use-file-picker';
 // import fs from 'vite-fs';
 // import * as fs from 'fs';
 
-import {copyFile, BaseDirectory} from '@tauri-apps/api/fs';
+import {readTextFile, writeTextFile, copyFile, BaseDirectory} from '@tauri-apps/api/fs';
+import { useScene } from "react-babylonjs";
 
 
 // import Vue from '../../../node_modules/@vitejs/plugin-vue'
@@ -27,6 +28,7 @@ import {copyFile, BaseDirectory} from '@tauri-apps/api/fs';
 export let file_content: string = "";
 
 const LoadingPage = () => {
+    const scene = useScene()
 
     const {openFilePicker, filesContent, loading} = useFilePicker({
         accept: '.obj',
@@ -50,11 +52,13 @@ const LoadingPage = () => {
         // console.log("что то выводим ???\n", file)
         
         // console.log("что то важное?? ", fs);
-        
+        const content = readTextFile('test.txt', { dir: BaseDirectory.Download});
+        console.log(content);
+        writeTextFile("D:/codes/empty_mech_ts/src/assets/test.obj", file_content)
         console.log("чего мы так долго добивались ✨✨: \n", file_content);
     }
 
-    console.log(copyFile);
+    
 
 
     
