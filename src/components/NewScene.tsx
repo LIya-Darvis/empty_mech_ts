@@ -5,15 +5,16 @@
 
 import React, { Suspense, useRef, useState } from "react";
 import "../App.css";
-import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
+import { Engine, GroundFromHeightMap, Mesh, Model, Scene, TiledGround, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
 import { Vector3, Color3, PhysicsImpostor } from "@babylonjs/core";
 import * as BABYLON from "@babylonjs/core";
-import HavokPhysics from "../../node_modules/@babylonjs/havok";
+import HavokPhysics, { ShapeType } from "../../node_modules/@babylonjs/havok";
 import {HavokPlugin } from "../../node_modules/@babylonjs/core/Physics/v2/Plugins/havokPlugin";
 import "@babylonjs/loaders/OBJ";
 import "@babylonjs/loaders/glTF";
 import '@babylonjs/loaders/OBJ/objFileLoader';
 import '@babylonjs/loaders/glTF/glTFFileLoader';
+// import * as x_1 from '../assets/models/'
 
 const DefaultScale =  new Vector3(1, 1, 1)
 const BiggerScale = new Vector3(30, 30, 30)
@@ -24,17 +25,13 @@ const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
 
 const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
-interface modelLoadingProps {
-  name: string,
-  rootUrl: string,
-  sceneFilename: string,
-  position?: Vector3
-};
+export let meshes_ar:BABYLON.AbstractMesh[] = [];
+
 
 function LoadingBox () {
 
   return (
-    <box name="qwe" position={new Vector3(0, 10, 0)}>
+    <box name="qwe" position={new Vector3(0, 50, 0)}>
         <physicsAggregate type={BABYLON.PhysicsShapeType.BOX} _options={{mass: 3, restitution: 0.2}} />
     </box> 
   )
@@ -47,44 +44,75 @@ export const LoadingModel = (props:any) => {
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
 
       <Model key={"loadingModel"} rootUrl={props.loadingModels.rootUrl} sceneFilename={props.loadingModels.sceneFilename} 
-            name={props.loadingModels.name} position={new Vector3(0, 3, 0)}
+            name={props.loadingModels.name} position={new Vector3(0, 15, 0)}
 
         onModelLoaded={
         (loadedModel) => {
-          console.log(props.loadingModels.name);
-          console.log(props.loadingModels.sceneFilename);
 
-          const meshes_ar = loadedModel.meshes;
+          let meshes_ar = loadedModel.meshes;
 
           meshes_ar?.forEach(mesh => {
             console.log(mesh);
-            const mesh_ph_aggr = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH, { mass: 60, restitution: 0}, scene)
-            console.log(mesh_ph_aggr)
+            const mesh_ph_aggr = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, scene)
+            // console.log(mesh_ph_aggr)
           })
 
         }}
+
+        
       />
     </Suspense>
     
   )
 }
 
+// Петцольд????
+
 export const NewScene = () => {
 
+
+  // ---- ---- ---- генерация вершин карты поверхности
+    var mapSubX = 20;
+    var mapSubZ = 20;
+    var noiseScale = 0.3;
+    var elevationScale = 8.0;
+    var mapData = new Float32Array(mapSubX * mapSubZ * 3); // 3 float values per point : x, y and z
+
+    var paths = [];                             // array for the ribbon model
+    for (var l = 0; l < mapSubZ; l++) {
+        var path = [];                          // only for the ribbon
+        for (var w = 0; w < mapSubX; w++) {
+            var x = (w - mapSubX * 0.5) * 2.0;
+            var z = (l - mapSubZ * 0.5) * 2.0;
+            var y = (Math.random() * noiseScale + Math.random() * noiseScale + Math.random() * noiseScale) / 2.75;
+            y *= (0.5 + y) * y * elevationScale;   // let's increase a bit the noise computed altitude
+                   
+            mapData[3 *(l * mapSubX + w)] = x;
+            mapData[3 * (l * mapSubX + w) + 1] = y;
+            mapData[3 * (l * mapSubX + w) + 2] = z;
+            
+            path.push(new BABYLON.Vector3(x, y, z));
+        }
+        paths.push(path);
+    }
+    // конец генерации карты
+
   const defaultModels = [
-    {rootUrl: "./src/assets/",
+    {rootUrl: "../assets/models/",
       sceneFilename: "composite_cube_with_center.obj",
       name: "cute_name_(～￣▽￣)～",
     },
-    {rootUrl: "./src/assets/",
+    {rootUrl: "../assets/models/",
     sceneFilename: "chains.obj",
     name: "cool_name_( ﹁ ﹁ ) ~→",
     },
-    {rootUrl: "./src/assets/",
+    {rootUrl: "./src/assets/models/",
     sceneFilename: "test.obj",
     name: "hmmmmm_(⌐■_■)",
     }
   ];
+
+  const scene = useScene();
 
     return(
       <div className="scene_canvas">
@@ -101,40 +129,91 @@ export const NewScene = () => {
             lowerRadiusLimit={8}
             upperRadiusLimit={70}
             upperBetaLimit={Math.PI / 2}
+            position={new Vector3(5, 170, 10)}
+            rotation={new Vector3(25, 5, 0)}
           />
           <hemisphericLight
             name="hemi"
-            direction={new Vector3(-7, 0, -7)}
-            intensity={0.4}
+            direction={new Vector3(3, 0, -2)}
+            intensity={1.0}
             // groundColor={Color3.Random()}
           />
           <directionalLight
             name="shadow-light"
             setDirectionToTarget={[Vector3.Zero()]}
-            direction={new Vector3(0, 3, 5)}
-            position={new Vector3(-2, 8, -4)}
-            intensity={1.3}
+            direction={new Vector3(0, 3, 2)}
+            position={new Vector3(-65, 5, -8)}
+            intensity={1.2}
             shadowMinZ={1}
             shadowMaxZ={2500}
           />
 
-          {/* <LoadingModel loadingModels={{rootUrl: defaultModels[0].rootUrl, 
-                                      sceneFilename: defaultModels[0].sceneFilename, 
-                                      name: defaultModels[0].name}}/> */}
-          {/* <LoadingModel loadingModels={{rootUrl: defaultModels[1].rootUrl, 
-                                      sceneFilename: defaultModels[1].sceneFilename, 
-                                      name: defaultModels[1].name}}/> */}
+          <LoadingBox/>
+
           <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl, 
                                       sceneFilename: defaultModels[2].sceneFilename, 
                                       name: defaultModels[2].name}}/>
+
+          
+          <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1}>
+            <physicsAggregate
+              type={BABYLON.PhysicsShapeType.MESH}
+              _options={{ mass: 0, restitution: 0.1 }}
+            />
+          </ribbon>
+
+
+          {/* <groundFromHeightMap 
+            name="groundMap"
+            url="./src/assets/maps/map_1.png"
+            width={300}
+            height={98}
+            subdivisions={10}
+            minHeight={0}
+            maxHeight={20}
+            position={new Vector3(0, 0, 0)}
+                        
+            >
+              
+            <physicsAggregate
+              type={BABYLON.PhysicsShapeType.BOX}
+              _options={{ mass: 0, restitution: 0.1 }}
+            />
+            
+
+          </groundFromHeightMap> */}
+
+
+          {/* <groundFromHeightMap 
+            name="groundMap"
+            url="./src/assets/maps/map_1.png"
+            width={300}
+            height={98}
+            subdivisions={15}
+            minHeight={0}
+            maxHeight={20}
+            position={new Vector3(0, -1, 0)}
+            >
+
+            {/* <physicsImpostor type={BABYLON.PhysicsShapeType.CONVEX_HULL}
+            _options={{mass: 0, restitution: 0.1}}/> 
+
+
+            <physicsAggregate
+              type={BABYLON.PhysicsShapeType.BOX}
+              _options={{ mass: 0, restitution: 0.1 }}
+            />
+          </groundFromHeightMap>
+          */}
+
 
           <ground
             name="ground1"
             width={50}
             height={50}
-            subdivisions={0}
+            subdivisions={5}
             receiveShadows={true}
-          >
+            position={new Vector3(0, -5, 0)}>
             <physicsAggregate
               type={BABYLON.PhysicsShapeType.BOX}
               _options={{ mass: 0, restitution: 0.1 }}

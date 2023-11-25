@@ -19,6 +19,7 @@ const ScenePage = () => {
                 {/* // верхняя панель элементов и кнопок */}
                 <div className={classes.panel}>
                     <PanelButton onClick={() => setOpen(true)}>Загрузить</PanelButton>
+                    <PanelButton>Начать тестирование</PanelButton>
                 </div>
 
                 {/* // панель открытия модального окна */}
