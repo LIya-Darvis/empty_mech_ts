@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import * as BABYLON from "@babylonjs/core";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -19,3 +20,9 @@ export default defineConfig(async () => ({
   // https://tauri.app/v1/api/config#buildconfig.beforedevcommand
   envPrefix: ["VITE_", "TAURI_"],
 }));
+
+
+// что это вообще за костыль
+interface Window {
+  meshes_ar:BABYLON.AbstractMesh[];
+}
