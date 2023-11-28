@@ -3,7 +3,7 @@
 и накладывается физика на каждую часть модели
 */
 
-import React, { Suspense, useRef, useState } from "react";
+import React, { Suspense, useContext, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import "../App.css";
 import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
@@ -16,8 +16,8 @@ import "@babylonjs/loaders/glTF";
 import '@babylonjs/loaders/OBJ/objFileLoader';
 import '@babylonjs/loaders/glTF/glTFFileLoader';
 
-const DefaultScale =  new Vector3(1, 1, 1)
-const BiggerScale = new Vector3(30, 30, 30)
+import { CurrentModelContext, CurrentModelContextType } from "../hooks/MyGlobalContext";
+
 
 const havokInstance = await HavokPhysics();
 const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
@@ -32,8 +32,10 @@ function LoadingBox () {
   )
 }
 
-export function LoadingModel (props:any) {
+export const LoadingModel = (props:any) => {
   const scene = useScene();
+
+
 
   return (
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
@@ -49,7 +51,28 @@ export function LoadingModel (props:any) {
           meshes_ar?.forEach(mesh => {
             console.log(mesh);
             const mesh_ph_aggr = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, scene)
+            // mesh.physicsImpostor?.applyImpulse(new BABYLON.Vector3(20, 8, -1), new BABYLON.Vector3(8, 10, 0));
+
           })
+
+          try {
+            // назначение параметра в глобал
+            if (useContext(CurrentModelContext) != null) {
+              const currentModel = useContext(CurrentModelContext);
+              console.log("первый уровень нормы")
+              if (currentModel?.modelArr != undefined) {
+                currentModel.modelArr = meshes_ar;
+                console.log("второй уровень нормы")
+              }
+            }
+          }
+          catch (e: unknown) {
+            console.log("что то пошло куда то не так");
+          }
+          
+          
+          
+          
 
         }}
       />
@@ -172,12 +195,4 @@ export const NewScene = () => {
 } 
 
 export default NewScene;
-
-// export default (loaded_model: any) => (
-
-//     <div>
-//       <LoadingModel/>
-//     </div>
-//   );
-
 
