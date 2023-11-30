@@ -3,7 +3,7 @@
 и накладывается физика на каждую часть модели
 */
 
-import React, { Suspense, useContext, useRef, useState } from "react";
+import React, { Fragment, Suspense, createContext, useContext, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import "../App.css";
 import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
@@ -16,7 +16,9 @@ import "@babylonjs/loaders/glTF";
 import '@babylonjs/loaders/OBJ/objFileLoader';
 import '@babylonjs/loaders/glTF/glTFFileLoader';
 
-import { CurrentModelContext, CurrentModelContextType } from "../hooks/MyGlobalContext";
+import { useModelsContext } from "../hooks";
+import { MyContext, useMyContext } from "../hooks/MyModelsContext";
+
 
 
 const havokInstance = await HavokPhysics();
@@ -32,12 +34,23 @@ function LoadingBox () {
   )
 }
 
+
+
 export const LoadingModel = (props:any) => {
+  
+  // const {modelId, setModelId} = useModelsContext();
+  // const {model, setModel} = useStateContext();
+
+  const { value, updateValue } = useMyContext();
+
+  // const handleButtonClick = () => {
+  //   () => setModel('Updated value');
+  // };
+
   const scene = useScene();
 
-
-
   return (
+    <Fragment>
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
 
       <Model key={"loadingModel"} rootUrl={props.loadingModels.rootUrl} sceneFilename={props.loadingModels.sceneFilename} 
@@ -49,34 +62,30 @@ export const LoadingModel = (props:any) => {
           const meshes_ar = loadedModel.meshes;
 
           meshes_ar?.forEach(mesh => {
-            console.log(mesh);
+            // console.log(mesh);
             const mesh_ph_aggr = new BABYLON.PhysicsAggregate(mesh, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, scene)
             // mesh.physicsImpostor?.applyImpulse(new BABYLON.Vector3(20, 8, -1), new BABYLON.Vector3(8, 10, 0));
 
           })
 
-          try {
-            // назначение параметра в глобал
-            if (useContext(CurrentModelContext) != null) {
-              const currentModel = useContext(CurrentModelContext);
-              console.log("первый уровень нормы")
-              if (currentModel?.modelArr != undefined) {
-                currentModel.modelArr = meshes_ar;
-                console.log("второй уровень нормы")
-              }
-            }
-          }
-          catch (e: unknown) {
-            console.log("что то пошло куда то не так");
-          }
-          
-          
-          
-          
+          console.log(meshes_ar);
 
+          // try {
+            // назначение параметра в глобал
+            // setModelId("meshes_ar");
+            // handleButtonClick();
+            updateValue('Updateeeeeed value');
+            console.log("данные по модельке обновлены");
+            console.log(value)
+          // }
+          
+          // catch (e: unknown) {
+          //   console.log(e);
+          // }
         }}
       />
     </Suspense>
+    </Fragment>
   )
 }
 
@@ -128,68 +137,73 @@ export const NewScene = () => {
   const scene = useScene();
 
     return(
-      <div className="scene_canvas">
-      <Engine antialias={true} adaptToDeviceRatio={true} canvasId="new_scene">
-        <Scene enablePhysics={[gravity, havokPlugin]}>
-          <arcRotateCamera
-            name="arc"
-            target={new Vector3(0, 1, 0)}
-            alpha={-Math.PI / 2}
-            beta={0.2 + Math.PI / 4}
-            wheelPrecision={50}
-            radius={14}
-            minZ={0.001}
-            lowerRadiusLimit={8}
-            upperRadiusLimit={100}
-            upperBetaLimit={Math.PI / 2}
-            position={new Vector3(5, 170, 10)}
-            rotation={new Vector3(25, 5, 0)}
-          />
-          <hemisphericLight
-            name="hemi"
-            direction={new Vector3(3, 0, -2)}
-            intensity={1.0}
-            // groundColor={Color3.Random()}
-          />
-          <directionalLight
-            name="shadow-light"
-            setDirectionToTarget={[Vector3.Zero()]}
-            direction={new Vector3(0, 3, 2)}
-            position={new Vector3(-65, 5, -8)}
-            intensity={1.2}
-            shadowMinZ={1}
-            shadowMaxZ={2500}
-          />
+      <Fragment>
+        <div className="scene_canvas">
+          <Engine antialias={true} adaptToDeviceRatio={true} canvasId="new_scene">
+            <Scene enablePhysics={[gravity, havokPlugin]}>
+              <arcRotateCamera
+                name="arc"
+                target={new Vector3(0, 1, 0)}
+                alpha={-Math.PI / 2}
+                beta={0.2 + Math.PI / 4}
+                wheelPrecision={50}
+                radius={14}
+                minZ={0.001}
+                lowerRadiusLimit={8}
+                upperRadiusLimit={100}
+                upperBetaLimit={Math.PI / 2}
+                position={new Vector3(5, 170, 10)}
+                rotation={new Vector3(25, 5, 0)}
+              />
+              <hemisphericLight
+                name="hemi"
+                direction={new Vector3(3, 0, -2)}
+                intensity={1.0}
+                // groundColor={Color3.Random()}
+              />
+              <directionalLight
+                name="shadow-light"
+                setDirectionToTarget={[Vector3.Zero()]}
+                direction={new Vector3(0, 3, 2)}
+                position={new Vector3(-65, 5, -8)}
+                intensity={1.2}
+                shadowMinZ={1}
+                shadowMaxZ={2500}
+              />
 
-          <LoadingBox/>
+              <LoadingBox/>
 
-          <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl, 
-                                      sceneFilename: defaultModels[2].sceneFilename, 
-                                      name: defaultModels[2].name}}/>
+              <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl, 
+                                          sceneFilename: defaultModels[2].sceneFilename, 
+                                          name: defaultModels[2].name}}/>
 
-          <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1}>
-            <physicsAggregate
-              type={BABYLON.PhysicsShapeType.MESH}
-              _options={{ mass: 0, restitution: 0.1 }}
-            />
-          </ribbon>
+              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1}>
+                <physicsAggregate
+                  type={BABYLON.PhysicsShapeType.MESH}
+                  _options={{ mass: 0, restitution: 0.1 }}
+                />
+              </ribbon>
 
-          {/* <ground
-            name="ground1"
-            width={50}
-            height={50}
-            subdivisions={5}
-            receiveShadows={true}
-            position={new Vector3(0, -5, 0)}>
-            <physicsAggregate
-              type={BABYLON.PhysicsShapeType.BOX}
-              _options={{ mass: 0, restitution: 0.1 }}
-            />
-          </ground> */}
+              {/* <ground
+                name="ground1"
+                width={50}
+                height={50}
+                subdivisions={5}
+                receiveShadows={true}
+                position={new Vector3(0, -5, 0)}>
+                <physicsAggregate
+                  type={BABYLON.PhysicsShapeType.BOX}
+                  _options={{ mass: 0, restitution: 0.1 }}
+                />
+              </ground> */}
 
-        </Scene>
-      </Engine>
-    </div>
+            </Scene>
+          </Engine>
+        </div>
+      </Fragment>
+
+
+      
     )
     
 } 

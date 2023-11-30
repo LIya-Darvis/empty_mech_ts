@@ -9,25 +9,21 @@ import ScenePage from "./pages/scenePage/ScenePage";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import SettingsPage from "./pages/settingsPage/SettingsPage";
 import React from "react";
+import { MyContext, initialValue } from "./hooks/MyModelsContext";
 
 function App() {
 
-  // const { gl } = useThree()
-
-  //   React.useEffect(() => {
-  //     console.log(gl.domElement) // will show me the `<canvas>` dom element.
-  //   }, [])
-    
-  // const [newScenePage, setNewScenePage] = useState(NewScenePage);
-  //   console.log(newScenePage, "<- экз новой сцены в приложении")
-
+  const [value , updateValue] = useState(initialValue);
 
   /* стоит ли добавлять перевод с китайского, если я сама не особо понимаю, 
   что мне накатил гуг0л переводчик?
   пока не хочу
   */
   return (
-    <ScenePage />
+    <MyContext.Provider value={{ value, updateValue }} >
+      <ScenePage />
+    </MyContext.Provider>
+    
   );
 }
 

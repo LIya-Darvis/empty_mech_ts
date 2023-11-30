@@ -1,8 +1,15 @@
 import { createContext, useContext } from "react"
-import * as BABYLON from "@babylonjs/core";
 
-export interface CurrentModelContextType {
-  modelArr: BABYLON.AbstractMesh[] | null
+export type GlobalContent = {
+  copy: string | null
+  setCopy:(c: string) => void
 }
 
-export const CurrentModelContext = createContext<CurrentModelContextType | null>(null);
+export const MyGlobalContext = createContext<GlobalContent>({
+    copy: 'default',
+    setCopy: () => {},
+})
+
+
+
+export const useGlobalContext = () => useContext(MyGlobalContext)

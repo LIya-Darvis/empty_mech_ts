@@ -1,34 +1,43 @@
-import React, { FC, useEffect, useContext, createContext } from "react";
+import React, { FC, useEffect, useContext, createContext, useState } from "react";
 import NewScene from "../../components/NewScene";
 import classes from './ScenePage.module.css';
-import { useState } from "react";
 import PanelButton from "../../components/UI/panelButton/PanelButton";
 import DisplayPanel from "../../components/UI/displayPanel/DisplayPanel";
 import ModalPanel from "../../components/UI/modalPanel/ModalPanel";
 import LoadingPage from "../loadingPage/LoadingPage";
-import { CurrentModelContext, CurrentModelContextType } from "../../hooks/MyGlobalContext";
-import * as BABYLON from "@babylonjs/core";
+
+import { ModelsContext, useModelsContext } from "../../hooks";
+import { MyContext, initialValue } from "../../hooks/MyModelsContext";
+
 
 
 const ScenePage = () => {
 
-    const [currentModel, setCurrentModel] = useState<CurrentModelContextType>({
-        modelArr: [],
-    });
+    // const {modelId, setModelId} = useModelsContext();
+    // const {model, setModel} = useStateContext();
+
+    const [value , updateValue] = useState(initialValue);
 
     // стейт для открытия модального окна 
     const [open, setOpen] = useState(false);
 
     const startTestingClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+
+        // setModelId("new_value");
+
+
         console.log("здесь должно быть прописано управление частями модели");
         console.log("и собственно:  ");
-        console.log(currentModel);
+        console.log(value)
+
 
     };
 
     return (
-        <CurrentModelContext.Provider value={currentModel}>
             
+        // <ModelsContext>
+        // <MyContext.Provider value={{ value, updateValue }} >
+
             <div className={classes.scene_page}>
                 
                 {/* // верхняя панель элементов и кнопок */}
@@ -57,11 +66,14 @@ const ScenePage = () => {
                 
             </div>
 
-        </CurrentModelContext.Provider>
+        // </MyContext.Provider>
+
 
             
-
-
+            
+            
+        // </ModelsContext>
+            
         
     );
 };
