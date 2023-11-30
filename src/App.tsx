@@ -19,10 +19,11 @@ function App() {
   что мне накатил гуг0л переводчик?
   пока не хочу
   */
+ 
   return (
-    <MyContext.Provider value={{ value, updateValue }} >
+    // <MyContext.Provider value={{ value, updateValue }} >
       <ScenePage />
-    </MyContext.Provider>
+    // </MyContext.Provider>
     
   );
 }

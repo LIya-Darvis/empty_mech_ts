@@ -6,15 +6,11 @@ import DisplayPanel from "../../components/UI/displayPanel/DisplayPanel";
 import ModalPanel from "../../components/UI/modalPanel/ModalPanel";
 import LoadingPage from "../loadingPage/LoadingPage";
 
-import { ModelsContext, useModelsContext } from "../../hooks";
 import { MyContext, initialValue } from "../../hooks/MyModelsContext";
 
 
 
 const ScenePage = () => {
-
-    // const {modelId, setModelId} = useModelsContext();
-    // const {model, setModel} = useStateContext();
 
     const [value , updateValue] = useState(initialValue);
 
@@ -23,21 +19,13 @@ const ScenePage = () => {
 
     const startTestingClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
-        // setModelId("new_value");
-
-
         console.log("здесь должно быть прописано управление частями модели");
-        console.log("и собственно:  ");
         console.log(value.value)
-
 
     };
 
     return (
-            
-        // <ModelsContext>
-        // <MyContext.Provider value={{ value, updateValue }} >
-
+        <MyContext.Provider value={{ value, updateValue }} >
             <div className={classes.scene_page}>
                 
                 {/* // верхняя панель элементов и кнопок */}
@@ -66,15 +54,8 @@ const ScenePage = () => {
                 
             </div>
 
-        // </MyContext.Provider>
+        </MyContext.Provider>
 
-
-            
-            
-            
-        // </ModelsContext>
-            
-        
     );
 };
 

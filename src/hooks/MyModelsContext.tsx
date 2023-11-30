@@ -12,7 +12,7 @@ export interface Returns {
 
 /** defines the default value if none provided */
 export const initialValue: ContextValue = {
-    value: "staaaaaart"
+    value: "start_value"
 };
 
 export const MyContext = createContext<Returns>({
