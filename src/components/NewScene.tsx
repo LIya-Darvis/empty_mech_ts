@@ -70,18 +70,16 @@ export const LoadingModel = (props:any) => {
 
           console.log(meshes_ar);
 
-          // try {
+          try {
             // назначение параметра в глобал
-            // setModelId("meshes_ar");
-            // handleButtonClick();
-            updateValue('Updateeeeeed value');
+            value.value = meshes_ar;
             console.log("данные по модельке обновлены");
-            console.log(value)
-          // }
+            console.log(value.value)
+          }
           
-          // catch (e: unknown) {
-          //   console.log(e);
-          // }
+          catch (e: unknown) {
+            console.log(e);
+          }
         }}
       />
     </Suspense>

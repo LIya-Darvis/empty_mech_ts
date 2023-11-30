@@ -1,24 +1,24 @@
 import { createContext, useContext, useState } from "react";
 import { ReactNode } from "react";
 
-// export type ContextValue = {
-//     model: any
-// };
+export type ContextValue = {
+    value: any
+};
 
 export interface Returns {
-    value: any
-    updateValue: (value: any) => void
+    value: ContextValue
+    updateValue: (newValue: ContextValue) => void
 }
 
 /** defines the default value if none provided */
-export const initialValue: any = {
-    model: "start_value"
+export const initialValue: ContextValue = {
+    value: "staaaaaart"
 };
 
-export const MyContext = createContext<any>({
+export const MyContext = createContext<Returns>({
     value: initialValue,
-    updateValue: (value: any) => {
-        return console.warn('DefaultContextCallback', value);
+    updateValue: (newValue: any) => {
+        return console.warn('DefaultContextCallback', newValue);
     }
 });
 

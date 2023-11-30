@@ -28,7 +28,7 @@ const ScenePage = () => {
 
         console.log("здесь должно быть прописано управление частями модели");
         console.log("и собственно:  ");
-        console.log(value)
+        console.log(value.value)
 
 
     };
