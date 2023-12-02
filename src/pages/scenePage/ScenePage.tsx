@@ -21,6 +21,11 @@ const ScenePage = () => {
 
         console.log("здесь должно быть прописано управление частями модели");
         console.log(value.value)
+        
+        value.value?.forEach(mesh => {
+            console.log(mesh.position.x);
+        })
+        
 
     };
 
