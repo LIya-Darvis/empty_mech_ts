@@ -16,8 +16,9 @@ import "@babylonjs/loaders/glTF";
 import '@babylonjs/loaders/OBJ/objFileLoader';
 import '@babylonjs/loaders/glTF/glTFFileLoader';
 
-import { useModelsContext } from "../hooks";
-import { MyContext, useMyContext } from "../hooks/MyModelsContext";
+// import { useModelsContext } from "../hooks";
+import { MyContext, useModelContext } from "../hooks/MyModelsContext";
+import { useSceneContext } from "../hooks/SceneContext";
 
 
 
@@ -34,14 +35,10 @@ function LoadingBox () {
   )
 }
 
-
-
 export const LoadingModel = (props:any) => {
   
   // const {modelId, setModelId} = useModelsContext();
   // const {model, setModel} = useStateContext();
-
-  const { value, updateValue } = useMyContext();
 
   // const handleButtonClick = () => {
   //   () => setModel('Updated value');
@@ -49,11 +46,15 @@ export const LoadingModel = (props:any) => {
 
   const scene = useScene();
 
+  // React.useEffect(() => {
+  //   console.log(elementRef.current);
+  // }, []);
+
   return (
     <Fragment>
     <Suspense fallback={ <box name="fallback" position={Vector3.Zero()} />}>
 
-      <Model key={"loadingModel"} rootUrl={props.loadingModels.rootUrl} sceneFilename={props.loadingModels.sceneFilename} 
+      <Model id="loadingModel" key={"loadingModel"} rootUrl={props.loadingModels.rootUrl} sceneFilename={props.loadingModels.sceneFilename} 
             name={props.loadingModels.name} position={new Vector3(0, 3, 0)}
 
         onModelLoaded={
@@ -70,16 +71,17 @@ export const LoadingModel = (props:any) => {
 
           console.log(meshes_ar);
 
-          try {
-            // назначение параметра в глобал
-            value.value = meshes_ar;
-            console.log("данные по модельке обновлены");
-            console.log(value.value)
-          }
-          
-          catch (e: unknown) {
-            console.log(e);
-          }
+          // попытка передать меши списком в глобальный компонент
+          // try {
+          //   // назначение параметра в глобал
+          //   // value.value = meshes_ar;
+          //   // console.log("данные по модельке обновлены");
+          //   // console.log(value.value)
+          // }
+          // catch (e: unknown) {
+          //   console.log(e);
+          // }
+
         }}
       />
     </Suspense>
@@ -90,6 +92,8 @@ export const LoadingModel = (props:any) => {
 // Чарльз Петцольд????
 
 export const NewScene = () => {
+
+  const { context_scene, updateScene } = useSceneContext();
 
   // ---- ---- ---- генерация вершин карты поверхности
     var mapSubX = 40;
@@ -104,7 +108,7 @@ export const NewScene = () => {
         for (var w = 0; w < mapSubX; w++) {
             var x = (w - mapSubX * 0.5) * 2.0;
             var z = (l - mapSubZ * 0.5) * 2.0;
-            var y = (Math.random() * noiseScale + Math.random() * noiseScale + Math.random() * noiseScale) / 2.4;
+            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 5;
             y *= (0.5 + y) * y * elevationScale;
                    
             mapData[3 *(l * mapSubX + w)] = x;
@@ -133,12 +137,23 @@ export const NewScene = () => {
   ];
 
   const scene = useScene();
+  // const engine = useEngine();
+
+  // console.log("взгляд изнутри ", engine)
 
     return(
       <Fragment>
         <div className="scene_canvas">
-          <Engine antialias={true} adaptToDeviceRatio={true} canvasId="new_scene">
-            <Scene enablePhysics={[gravity, havokPlugin]}>
+          <Engine antialias={true} adaptToDeviceRatio={true} canvasId="new_scene" >
+            <Scene enablePhysics={[gravity, havokPlugin]} onSceneMount={scene => {
+              context_scene.this_scene = scene.scene
+
+              context_scene.this_engine = scene.scene.getEngine()
+              console.log("взгляд изнутри ", context_scene.this_engine)
+
+              scene.scene.enablePhysics();
+
+              }}>
               <arcRotateCamera
                 name="arc"
                 target={new Vector3(0, 1, 0)}
@@ -171,11 +186,11 @@ export const NewScene = () => {
 
               <LoadingBox/>
 
-              <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl, 
+              {/* <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl,  
                                           sceneFilename: defaultModels[2].sceneFilename, 
-                                          name: defaultModels[2].name}}/>
+                                          name: defaultModels[2].name}}/> */}
 
-              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1}>
+              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -2, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.MESH}
                   _options={{ mass: 0, restitution: 0.1 }}
@@ -185,10 +200,10 @@ export const NewScene = () => {
               {/* <ground
                 name="ground1"
                 width={50}
-                height={50}
+                height={120}
                 subdivisions={5}
                 receiveShadows={true}
-                position={new Vector3(0, -5, 0)}>
+                position={new Vector3(0, -4, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.BOX}
                   _options={{ mass: 0, restitution: 0.1 }}

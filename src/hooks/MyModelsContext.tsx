@@ -6,20 +6,19 @@ export type ContextValue = {
 };
 
 export interface Returns {
-    value: ContextValue
-    updateValue: (newValue: ContextValue) => void
+    mesh_arr: ContextValue
+    updateMeshArr: (newValue: ContextValue) => void
 }
 
-/** defines the default value if none provided */
 export const initialValue: ContextValue = {
     value: "start_value"
 };
 
 export const MyContext = createContext<Returns>({
-    value: initialValue,
-    updateValue: (newValue: any) => {
+    mesh_arr: initialValue,
+    updateMeshArr: (newValue: any) => {
         return console.warn('DefaultContextCallback', newValue);
     }
 });
 
-export const useMyContext = () => useContext(MyContext);
+export const useModelContext = () => useContext(MyContext);
