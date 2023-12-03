@@ -14,6 +14,10 @@ import { useEngine } from "react-babylonjs";
 // import { x } from "../../assets/models"
 
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const ScenePage = () => {
 
     // для апдейта моделек в сцене
@@ -26,7 +30,7 @@ const ScenePage = () => {
     // стейт для открытия модального окна 
     const [open, setOpen] = useState(false);
 
-    const startTestingClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const startTestingClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
         console.log("здесь должно быть прописано управление частями модели");
 
@@ -38,18 +42,51 @@ const ScenePage = () => {
         console.log("якобы ссылка на сцену ", this_scene)
         console.log("якобы движок самой сцены ", this_engine)
 
-
-        console.log("позиция меша по иксу", this_mesh_arr)
-
-        // this_scene.getMeshById("Cylinder").position.y += 3;
+        console.log("позиция меша по иксу", this_mesh_arr.lenght)
 
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
             console.log(this_id)
-            // this_id.physicsImpostor = new BABYLON.PhysicsImpostor(this_id, BABYLON.PhysicsImpostor.MeshImpostor, {mass: 15, restitution: 0.5});            
-            const mesh_ph_aggr = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 10, restitution: 0}, this_scene)
+     
+            this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 10, restitution: 0}, this_scene)
+
+            console.log("название физ свойств", this_id.physicsAggregate);
+            
             // this_id.physicsImpostor.applyImpulse(new BABYLON.Vector3 (0, 0.3, 0), this_scene.getMeshById(mesh_id).getAbsolutePosition ())
         });
+
+        // setTimeout(() => {}, 12000);
+
+        await sleep(5000);
+
+        for (let i = 0; i < 45; i++) {
+            const ran_mesh = Math.floor(Math.random() * (5-1 - 0 + 1) + 0);
+            console.log(ran_mesh);
+
+            const ran_y = Math.random() * (25 - 12) + 12;
+            const ran_z = Math.random() * (45 - 30) + 30;
+
+            // setTimeout(() => {}, 5000);
+            await sleep(750);
+
+            const this_id = this_scene.getMeshById(this_mesh_arr[ran_mesh]);
+            this_id.physicsAggregate.body.applyImpulse(
+                new BABYLON.Vector3(0, ran_y, ran_z),
+                this_id.position
+            );
+        }
+
+        // this_mesh_arr.forEach((mesh_id: any) => {
+
+        //     const debounceResize = setTimeout(() => {}, 8500);
+
+        //     const this_id = this_scene.getMeshById(mesh_id);
+        //     this_id.physicsAggregate.body.applyImpulse(
+        //         new BABYLON.Vector3(0, 15, 35),
+        //         this_id.position
+        //     );
+
+        // });
 
     };
 
@@ -93,3 +130,7 @@ const ScenePage = () => {
 };
 
 export default ScenePage;
+
+
+
+
