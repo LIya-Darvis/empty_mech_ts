@@ -6,7 +6,7 @@
 import React, { Fragment, Suspense, createContext, useContext, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import "../App.css";
-import { Engine, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
+import { Box, Engine, Material, Mesh, Model, Scene, useBeforeRender, useClick, useEngine, useHover, useScene } from "react-babylonjs";
 import { Vector3, Color3, PhysicsImpostor } from "@babylonjs/core";
 import * as BABYLON from "@babylonjs/core";
 import HavokPhysics, { ShapeType } from "../../node_modules/@babylonjs/havok";
@@ -29,9 +29,25 @@ const gravity = new BABYLON.Vector3(0, -9.8, 0);
 
 function LoadingBox () {
   return (
-    <box name="qwe" position={new Vector3(0, 50, 0)}>
+    <box name="load_box" position={new Vector3(0, 20, 0)}>
         <physicsAggregate type={BABYLON.PhysicsShapeType.BOX} _options={{mass: 3, restitution: 0.2}} />
     </box> 
+  )
+}
+
+function FinishPoint () {
+
+  const { context_scene, updateScene } = useSceneContext();
+
+  const myMaterial = new BABYLON.StandardMaterial("myMaterial", context_scene.this_scene.scene);
+
+  myMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
+  myMaterial.specularColor = new BABYLON.Color3(1.5, 1.6, 1.87);
+  myMaterial.emissiveColor = new BABYLON.Color3(1, 5, 1);
+  myMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
+
+  return (
+    <box name="finish_point" position={new Vector3(0, 1, 35)} material={myMaterial}/>
   )
 }
 
@@ -96,9 +112,9 @@ export const NewScene = () => {
   const { context_scene, updateScene } = useSceneContext();
 
   // ---- ---- ---- генерация вершин карты поверхности
-    var mapSubX = 40;
-    var mapSubZ = 80;
-    var noiseScale = 0.3;
+    var mapSubX = 100;
+    var mapSubZ = 120;
+    var noiseScale = 0.4;
     var elevationScale = 8.0;
     var mapData = new Float32Array(mapSubX * mapSubZ * 3);
 
@@ -108,7 +124,7 @@ export const NewScene = () => {
         for (var w = 0; w < mapSubX; w++) {
             var x = (w - mapSubX * 0.5) * 2.0;
             var z = (l - mapSubZ * 0.5) * 2.0;
-            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 5;
+            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 4.5;
             y *= (0.5 + y) * y * elevationScale;
                    
             mapData[3 *(l * mapSubX + w)] = x;
@@ -138,7 +154,6 @@ export const NewScene = () => {
 
   const scene = useScene();
   // const engine = useEngine();
-
   // console.log("взгляд изнутри ", engine)
 
     return(
@@ -152,6 +167,8 @@ export const NewScene = () => {
               console.log("взгляд изнутри ", context_scene.this_engine)
 
               scene.scene.enablePhysics();
+
+              // scene.scene.getMeshById("zxc")?.position._x
 
               }}>
               <arcRotateCamera
@@ -186,16 +203,19 @@ export const NewScene = () => {
 
               <LoadingBox/>
 
+              <FinishPoint/>
+
               {/* <LoadingModel loadingModels={{rootUrl: defaultModels[2].rootUrl,  
                                           sceneFilename: defaultModels[2].sceneFilename, 
                                           name: defaultModels[2].name}}/> */}
 
-              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -2, 0)}>
+              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -3, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.MESH}
                   _options={{ mass: 0, restitution: 0.1 }}
                 />
               </ribbon>
+
 
               {/* <ground
                 name="ground1"

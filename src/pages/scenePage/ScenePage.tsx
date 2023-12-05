@@ -11,20 +11,41 @@ import { MyContext, initialValue, useModelContext } from "../../hooks/MyModelsCo
 import { SceneContext, initialScene } from "../../hooks/SceneContext";
 import { AssetsManager } from "@babylonjs/core";
 import { useEngine } from "react-babylonjs";
-// import { x } from "../../assets/models"
 
+import { invoke } from "@tauri-apps/api/tauri";
+import { ModelParams } from "../../components/ModelParams";
+
+// import { x } from "../../assets/models"
 
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// дополнительное объявление типов
+export type MeshPosition = {
+    x: number,
+    y: number,
+    z: number
+}
+export type ModelMesh = {
+    meshId: string
+    meshPosition: MeshPosition
+}
+export type ModelMeshArr = {
+    meshArr: ModelMesh[] | null
+}
+
+
+export const modelMeshArr : ModelMeshArr = {
+    meshArr: [],
+};
 
 const ScenePage = () => {
 
     // для апдейта моделек в сцене
     const { mesh_arr, updateMeshArr } = useModelContext();
 
-
-    // для апдейта ссылки на саму сцену огооооооо
+    // для апдейта ссылки на сцену
     const [context_scene , updateScene] = useState(initialScene);
 
     // стейт для открытия модального окна 
@@ -39,32 +60,41 @@ const ScenePage = () => {
 
         const this_mesh_arr = mesh_arr.value;
 
-        console.log("якобы ссылка на сцену ", this_scene)
-        console.log("якобы движок самой сцены ", this_engine)
-
-        console.log("позиция меша по иксу", this_mesh_arr.lenght)
-
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
-            console.log(this_id)
-     
             this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 10, restitution: 0}, this_scene)
-
-            console.log("название физ свойств", this_id.physicsAggregate);
-            
-            // this_id.physicsImpostor.applyImpulse(new BABYLON.Vector3 (0, 0.3, 0), this_scene.getMeshById(mesh_id).getAbsolutePosition ())
         });
-
-        // setTimeout(() => {}, 12000);
 
         await sleep(5000);
 
-        for (let i = 0; i < 45; i++) {
+        modelMeshArr.meshArr?.reduce;
+
+        // передача данных
+        this_mesh_arr.forEach((mesh_id: any) => {
+            const this_id = this_scene.getMeshById(mesh_id);
+     
+            const mesh_x_position = this_id.position._x;
+            const mesh_y_position = this_id.position._y;
+            const mesh_z_position = this_id.position._z;
+            const buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
+            console.log("предполагаемая позиция ", buffer_position);
+
+            const buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
+            console.log("расматриваемый меш ", buffer_mesh);
+
+            modelMeshArr.meshArr?.push(buffer_mesh);
+            // console.log("промежуточный массив ", modelMeshArr.meshArr);
+        });
+
+        console.log("итоговый массив ", modelMeshArr.meshArr);
+
+        // рандомное передвижение
+        for (let i = 0; i < 150; i++) {
             const ran_mesh = Math.floor(Math.random() * (5-1 - 0 + 1) + 0);
             console.log(ran_mesh);
 
-            const ran_y = Math.random() * (25 - 12) + 12;
-            const ran_z = Math.random() * (45 - 30) + 30;
+            const ran_y = Math.random() * (45 - 25) + 25;
+            const ran_z = Math.random() * (65 - 40) + 40;
 
             // setTimeout(() => {}, 5000);
             await sleep(750);
@@ -75,18 +105,6 @@ const ScenePage = () => {
                 this_id.position
             );
         }
-
-        // this_mesh_arr.forEach((mesh_id: any) => {
-
-        //     const debounceResize = setTimeout(() => {}, 8500);
-
-        //     const this_id = this_scene.getMeshById(mesh_id);
-        //     this_id.physicsAggregate.body.applyImpulse(
-        //         new BABYLON.Vector3(0, 15, 35),
-        //         this_id.position
-        //     );
-
-        // });
 
     };
 
