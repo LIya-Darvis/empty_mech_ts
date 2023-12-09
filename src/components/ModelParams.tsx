@@ -15,8 +15,8 @@ export type ModelMeshArr = {
 
 export class ModelParams {
 
-    private modelMeshArr: ModelMeshArr | undefined
-    private finishPoint: ModelMesh | undefined
+    modelMeshArr: ModelMeshArr | undefined
+    finishPoint: ModelMesh | undefined
 
     public constructor(modelMeshArr: ModelMeshArr | undefined, finishPoint: ModelMesh | undefined) {
         this.modelMeshArr = modelMeshArr;

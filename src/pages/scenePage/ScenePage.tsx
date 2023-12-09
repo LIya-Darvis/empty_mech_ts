@@ -13,7 +13,9 @@ import { AssetsManager } from "@babylonjs/core";
 import { useEngine } from "react-babylonjs";
 
 import { invoke } from "@tauri-apps/api/tauri";
-import { ModelParams } from "../../components/ModelParams";
+// import { ModelParams } from "../../components/ModelParams";
+
+// const invoke = window.__TAURI__.invoke
 
 // import { x } from "../../assets/models"
 
@@ -34,32 +36,31 @@ export type ModelMesh = {
 export type ModelMeshArr = {
     meshArr: ModelMesh[] | null
 }
-
-
 export const modelMeshArr : ModelMeshArr = {
-    meshArr: [],
+    meshArr: []
 };
 
 const ScenePage = () => {
+    const { mesh_arr, updateMeshArr } = useModelContext();      // для апдейта моделек в сцене
+    const [context_scene , updateScene] = useState(initialScene);    // для апдейта ссылки на сцену
+    const [open, setOpen] = useState(false);     // стейт для открытия модального окна
 
-    // для апдейта моделек в сцене
-    const { mesh_arr, updateMeshArr } = useModelContext();
+    // функция на передвижение
+    async function moving(meshes_json: string, finish_json: string) {
+        // console.log("получение массива внутри функции", meshes_json)
+        // let result = await invoke('moving', {meshes_json});
+        // set_neuro_meshes_json(await invoke('moving', {meshes_arr: 'meshes_json'}));
+        console.log(await invoke('moving', {meshesArr: meshes_json, finishPoint: finish_json}));
 
-    // для апдейта ссылки на сцену
-    const [context_scene , updateScene] = useState(initialScene);
-
-    // стейт для открытия модального окна 
-    const [open, setOpen] = useState(false);
+    }
 
     const startTestingClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
-        console.log("здесь должно быть прописано управление частями модели");
-
         const this_scene = context_scene.this_scene;
         const this_engine = context_scene.this_engine
-
         const this_mesh_arr = mesh_arr.value;
 
+        // назначение физики
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
             this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 10, restitution: 0}, this_scene)
@@ -77,16 +78,17 @@ const ScenePage = () => {
             const mesh_y_position = this_id.position._y;
             const mesh_z_position = this_id.position._z;
             const buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
-            console.log("предполагаемая позиция ", buffer_position);
 
             const buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
-            console.log("расматриваемый меш ", buffer_mesh);
-
             modelMeshArr.meshArr?.push(buffer_mesh);
-            // console.log("промежуточный массив ", modelMeshArr.meshArr);
         });
 
-        console.log("итоговый массив ", modelMeshArr.meshArr);
+        const finish_position: MeshPosition = {x:0, y:1, z:35};
+        const finish_mesh : ModelMesh = {meshId: "finish_point", meshPosition: finish_position};
+        const modelJson = JSON.stringify(modelMeshArr.meshArr);
+        const finishJson = JSON.stringify(finish_mesh);
+
+        moving(modelJson, finishJson);
 
         // рандомное передвижение
         for (let i = 0; i < 150; i++) {
@@ -94,7 +96,7 @@ const ScenePage = () => {
             console.log(ran_mesh);
 
             const ran_y = Math.random() * (45 - 25) + 25;
-            const ran_z = Math.random() * (65 - 40) + 40;
+            const ran_z = Math.random() * (65 - 30) + 30;
 
             // setTimeout(() => {}, 5000);
             await sleep(750);
