@@ -39,17 +39,42 @@ export type ModelMeshArr = {
 export const modelMeshArr : ModelMeshArr = {
     meshArr: []
 };
+export const finishMeshArr : ModelMeshArr = {
+    meshArr: []
+};
 
 const ScenePage = () => {
     const { mesh_arr, updateMeshArr } = useModelContext();      // для апдейта моделек в сцене
     const [context_scene , updateScene] = useState(initialScene);    // для апдейта ссылки на сцену
-    const [open, setOpen] = useState(false);     // стейт для открытия модального окна
+    const [open, setOpen] = useState(false);     // стейт для открытия модального окна\
+
+    // все для таймера, все для победы
+    const [countTime, setCountTime] = useState(false);
+    const [seconds, setSeconds] = useState(20);
+
+    useEffect(() => {
+        const target = new Date();
+        target.setSeconds(target.getSeconds() + 20)
+    
+        const interval = setInterval(() => {
+          const now = new Date();
+          const difference = target.getTime() - now.getTime();
+
+          console.log("разница: ", difference)
+    
+          const s = Math.floor((difference % (1000 * 60)) / 1000);
+          setSeconds(s);
+    
+          if (s <= 0) {
+            setCountTime(true);
+          }
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, []);
 
     // функция на передвижение
     async function moving(meshes_json: string, finish_json: string) {
-        // console.log("получение массива внутри функции", meshes_json)
-        // let result = await invoke('moving', {meshes_json});
-        // set_neuro_meshes_json(await invoke('moving', {meshes_arr: 'meshes_json'}));
         console.log(await invoke('moving', {meshesArr: meshes_json, finishPoint: finish_json}));
 
     }
@@ -63,12 +88,13 @@ const ScenePage = () => {
         // назначение физики
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
-            this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 10, restitution: 0}, this_scene)
+            this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, this_scene)
         });
 
-        await sleep(5000);
+        await sleep(3000);
 
         modelMeshArr.meshArr?.reduce;
+        finishMeshArr.meshArr?.reduce;
 
         // передача данных
         this_mesh_arr.forEach((mesh_id: any) => {
@@ -85,13 +111,16 @@ const ScenePage = () => {
 
         const finish_position: MeshPosition = {x:0, y:1, z:35};
         const finish_mesh : ModelMesh = {meshId: "finish_point", meshPosition: finish_position};
+        finishMeshArr.meshArr?.push(finish_mesh);
         const modelJson = JSON.stringify(modelMeshArr.meshArr);
-        const finishJson = JSON.stringify(finish_mesh);
+        const finishJson = JSON.stringify(finishMeshArr.meshArr);
 
         moving(modelJson, finishJson);
 
+        
+
         // рандомное передвижение
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 25; i++) {
             const ran_mesh = Math.floor(Math.random() * (5-1 - 0 + 1) + 0);
             console.log(ran_mesh);
 
@@ -132,7 +161,14 @@ const ScenePage = () => {
                         {/* // верхняя панель с данными о загруженной модели */}
                         <DisplayPanel>
                             <div>n fps</div>
-                            <div>¯\_(ツ)_/¯</div>
+                            {countTime ? (
+                                <div> 
+                                    0
+                                </div>
+                            ) : (<div> 
+                                    {seconds}
+                                </div>)}
+                            
                             <div>obj model</div>
                         </DisplayPanel>
                         {/* // компонент сцены (самого виртуального пространства) */}
