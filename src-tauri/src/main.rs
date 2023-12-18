@@ -28,9 +28,7 @@ struct ModelParams {
     finishPoint: ModelMesh
 }
 
-// хочу вишневое пиво
-
-
+// относим это к драме или к фарсу?
 
 #[tauri::command]
 fn moving(meshes_arr: &str, finish_point: &str) -> String {

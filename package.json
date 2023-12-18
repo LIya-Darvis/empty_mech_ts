@@ -29,6 +29,7 @@
     "fs": "^0.0.1-security",
     "react": "^18.2.0",
     "react-babylonjs": "^3.1.25",
+    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
     "sass": "^1.69.5",
