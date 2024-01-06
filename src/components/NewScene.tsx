@@ -102,7 +102,7 @@ export const NewScene = () => {
         for (var w = 0; w < mapSubX; w++) {
             var x = (w - mapSubX * 0.5) * 2.0;
             var z = (l - mapSubZ * 0.5) * 2.0;
-            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 3.5;
+            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 1.7;
             y *= (0.5 + y) * y * elevationScale;
                    
             mapData[3 *(l * mapSubX + w)] = x;
@@ -179,15 +179,15 @@ export const NewScene = () => {
 
               <FinishPoint/>
 
-              {/* <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -3, 0)}>
+              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -3, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.MESH}
                   _options={{ mass: 0, restitution: 0.1 }}
                 />
-              </ribbon> */}
+              </ribbon>
 
 
-              <ground
+              {/* <ground
                 name="ground1"
                 width={200}
                 height={320}
@@ -199,7 +199,7 @@ export const NewScene = () => {
                   type={BABYLON.PhysicsShapeType.BOX}
                   _options={{ mass: 0, restitution: 0.01 }}
                 />
-              </ground>
+              </ground> */}
 
             </Scene>
           </Engine>

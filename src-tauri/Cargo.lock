@@ -614,6 +614,7 @@ checksum = "4ef6b89e5b37196644d8796de5268852ff179b44e96276cf4290264843743bb7"
 name = "empty_mech_ts"
 version = "0.0.0"
 dependencies = [
+ "lazy_static",
  "serde",
  "serde_json",
  "tauri",
