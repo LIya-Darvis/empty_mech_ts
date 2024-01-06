@@ -37,7 +37,7 @@ export type ModelMesh = {
 export type ModelMeshArr = {
     meshArr: ModelMesh[] | null
 }
-export const modelMeshArr : ModelMeshArr = {
+export var modelMeshArr : ModelMeshArr = {
     meshArr: []
 };
 export const startPositionhMeshArr : ModelMeshArr = {
@@ -53,11 +53,13 @@ const ScenePage = () => {
     const [open, setOpen] = useState(false);     // стейт для открытия модального окна
     const [finishStatus, setFinishStatus] = useState(false);    // промежуточная переменная для дамага на цикл итераций
     const [iteration, setIteration] = useState(1);      // кол-во итераций
-    const iterationRef = useRef<number>(1);
+    const iterationRef = useRef<number>(0);
 
     // все для таймера, все для победы
-    const [timer, setTimer] = useState(5);
-    const timerRef = useRef<number>(5);
+    const [timer, setTimer] = useState(0);
+    const timerRef = useRef<number>(0);
+
+    const globalTimer = 25;
 
     function resolveAfter1Second() {
         return new Promise(resolve => {
@@ -76,79 +78,187 @@ const ScenePage = () => {
        }
     }
 
+    // установка базовых параметров для работы нейронки
+    async function const_initialize(mesh_count: number) {
+        await invoke('const_initialize', {meshCount: mesh_count});
+    }
+
     // функция на передвижение
     async function moving(meshes_json: string, finish_json: string) {
         console.log(await invoke('moving', {meshesArr: meshes_json, finishPoint: finish_json}));
-        // await sleep(3500);
-        // console.log("конец движения")
     }
 
+    // функция для активации поиска оптимального паттерна управления в пределах таймера
     const startTestingClick = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        // setTimer(12);
 
         const this_scene = context_scene.this_scene;
         const this_engine = context_scene.this_engine
-        const this_mesh_arr = mesh_arr.value;
+        let this_mesh_arr = mesh_arr.value;
+
+        // обнуление параметров
+        modelMeshArr.meshArr?.reduce;
+        startPositionhMeshArr.meshArr?.reduce;
+        finishMeshArr.meshArr?.reduce;
 
         // назначение физики
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
-            this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, this_scene)
+            this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, 
+                                                            { mass: 40, restitution: 0.05, friction: 0.5}, this_scene)
         });
 
+        // задержка старта после применения физики
+        await sleep(3000);
 
-        await sleep(1500);
-
-        // обнуление параметров
-        modelMeshArr.meshArr?.reduce;
-        finishMeshArr.meshArr?.reduce;
-
-        // передача данных
+        // занесение данных о положении мешей, в которое нужно вернуться
+        // после достижения финиша или истечения времени таймера
         this_mesh_arr.forEach((mesh_id: any) => {
             const this_id = this_scene.getMeshById(mesh_id);
             const mesh_x_position = this_id.position._x;
             const mesh_y_position = this_id.position._y;
             const mesh_z_position = this_id.position._z;
-            const buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
-            const buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
+            let buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
+            let buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
             modelMeshArr.meshArr?.push(buffer_mesh);
             startPositionhMeshArr.meshArr?.push(buffer_mesh);
         });
+
+        console.log(startPositionhMeshArr.meshArr);
+        // const_initialize(startPositionhMeshArr.meshArr?.length);
+
 
         // назначение конечной точки
         const finish_position: MeshPosition = {x:0, y:1, z:35};
         const finish_mesh : ModelMesh = {meshId: "finish_point", meshPosition: finish_position};
         finishMeshArr.meshArr?.push(finish_mesh);
-        const modelJson = JSON.stringify(modelMeshArr.meshArr);
+        // let modelJson = JSON.stringify(modelMeshArr.meshArr);
         const finishJson = JSON.stringify(finishMeshArr.meshArr);
 
-        
-        // все еще хочу вишневое пиво
-        // даже еще сильнее
-
-        setTimer(5);
-        timerRef.current = 5;
-        while (iterationRef.current <= 3) {
+        // начало работы итераций
+        // setTimer(5);
+        timerRef.current = globalTimer;
+        while (iterationRef.current <= 15) {
             console.log(timerRef.current);
 
-            asyncCall(6);
+            // начало работы таймера
+            asyncCall(globalTimer);
             while (timerRef.current > 0) {
 
                 await console.log("происходящее остается за кадром");
 
+                // когда время таймера истекло
                 if (timerRef.current < 0) {
-                    setFinishStatus(false)
+                    console.log(timerRef.current);
+                    
                     break;
                 }
                 else {
-                    await moving(modelJson, finishJson);
+                    // await moving(modelJson, finishJson);
+
+                    for (let i = 0; i < 45; i++) {
+                        const ran_mesh = Math.floor(Math.random() * (5-1 - 0 + 1) + 0);
+                        // console.log(ran_mesh);
+
+                        const ran_x = Math.random() * (5 - (-5)) + (-5);
+                        const ran_y = Math.random() * (85 - 65) + 65;
+                        const ran_z = Math.random() * (85 - 50) + 50;
+
+                        // setTimeout(() => {}, 5000);
+                        
+
+                        const this_id = this_scene.getMeshById(this_mesh_arr[ran_mesh]);
+                        this_id.physicsAggregate.body.applyImpulse(
+                            new BABYLON.Vector3(ran_x, ran_y, ran_z),
+                            this_id.position
+
+                            
+                        );
+
+                        modelMeshArr.meshArr = [];
+
+                        this_mesh_arr.forEach((mesh_id: any) => {
+                            const this_id = this_scene.getMeshById(mesh_id);
+                            const mesh_x_position = this_id.position._x;
+                            const mesh_y_position = this_id.position._y;
+                            const mesh_z_position = this_id.position._z;
+                            let buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
+                            let buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
+                            modelMeshArr.meshArr?.push(buffer_mesh);
+                        });
+
+                        const modelJson = JSON.stringify(modelMeshArr.meshArr);
+
+                        await moving(modelJson, finishJson);
+
+                        await sleep(350);
+                    }
+                    
                     console.log(timerRef.current);
                 }
             }
             setIteration(iteration + 1);
             iterationRef.current += 1;
-            setTimer(5);
-            timerRef.current = 5
+            timerRef.current = globalTimer
+            
+            this_mesh_arr.forEach((mesh_id: any) => {
+                this_scene.getMeshById(mesh_id).dispose();
+                // let counter = 0
+                // for (let index = 0; index < startPositionhMeshArr.meshArr.length; index++) {
+                //     if (startPositionhMeshArr.meshArr[index].meshId == mesh_id) {
+                //         counter = index
+                //         break;
+                //     }
+                // }
+                // const start_id = startPositionhMeshArr.meshArr[counter].meshId;
+                // console.log(mesh_id, "( o o)", start_id)
+                // // this_scene.getMeshById(mesh_id).position = 
+                // //             new BABYLON.Vector3(startPositionhMeshArr.meshArr[counter].meshPosition.x, 
+                // //                                 startPositionhMeshArr.meshArr[counter].meshPosition.y, 
+                // //                                 startPositionhMeshArr.meshArr[counter].meshPosition.z);
+                
+                // this_scene.getMeshById(mesh_id).position.x = startPositionhMeshArr.meshArr[counter].meshPosition.x;
+                // this_scene.getMeshById(mesh_id).position.y = startPositionhMeshArr.meshArr[counter].meshPosition.y;
+                // this_scene.getMeshById(mesh_id).position.z = startPositionhMeshArr.meshArr[counter].meshPosition.z;
+                // console.log(this_scene.getMeshById(mesh_id).position)
+            });
+
+            // повторная загрузка модели
+            BABYLON.SceneLoader.ImportMesh("", "src/assets/models/", "test.obj", this_scene, function (newMeshes) {
+                // const new_mesh_arr: any[] = [];
+                newMeshes.forEach(mesh => {
+                    // new_mesh_arr.push(mesh.id);
+                    const this_id = this_scene.getMeshById(mesh.id);
+                    const mesh_x_position = this_id.position._x;
+                    const mesh_y_position = this_id.position._y;
+                    const mesh_z_position = this_id.position._z;
+                    const buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
+                    const buffer_mesh : ModelMesh = {meshId: mesh.id, meshPosition: buffer_position};
+                    modelMeshArr.meshArr?.push(buffer_mesh);
+                });
+                // mesh_arr.value = new_mesh_arr;
+                // this_mesh_arr.forEach((mesh_id: any) => {
+                //     const this_id = this_scene.getMeshById(mesh_id);
+                //     const mesh_x_position = this_id.position._x;
+                //     const mesh_y_position = this_id.position._y;
+                //     const mesh_z_position = this_id.position._z;
+                //     const buffer_position: MeshPosition = {x: mesh_x_position, y: mesh_y_position, z: mesh_z_position};
+                //     const buffer_mesh : ModelMesh = {meshId: mesh_id, meshPosition: buffer_position};
+                //     modelMeshArr.meshArr?.push(buffer_mesh);
+                //     startPositionhMeshArr.meshArr?.push(buffer_mesh);
+                // });
+            });
+
+            this_mesh_arr = mesh_arr.value;
+
+            console.log(this_mesh_arr);
+            await sleep (2500);
+
+            // повторное назначение физики
+            this_mesh_arr.forEach((mesh_id: any) => {
+                const this_id = this_scene.getMeshById(mesh_id);
+                this_id.physicsAggregate = new BABYLON.PhysicsAggregate(this_id, BABYLON.PhysicsShapeType.MESH, { mass: 20, restitution: 0}, this_scene)
+            });
+
             console.log("кадр закончен");
         }
 
@@ -196,10 +306,10 @@ const ScenePage = () => {
                     <div className={classes.scene}>
                         {/* // верхняя панель с данными о загруженной модели */}
                         <DisplayPanel>
-                            <div>{iteration} iteration</div>
-                            <div>{timer} sec</div>
+                            <div>{iterationRef.current} iteration</div>
+                            <div>{timerRef.current} sec</div>
                             
-                            <div>obj model</div>
+                            <div> </div>
                         </DisplayPanel>
                         {/* // компонент сцены (самого виртуального пространства) */}
                         <NewScene/>

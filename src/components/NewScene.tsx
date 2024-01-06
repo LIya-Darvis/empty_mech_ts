@@ -179,26 +179,27 @@ export const NewScene = () => {
 
               <FinishPoint/>
 
-              <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -3, 0)}>
+              {/* <ribbon name="ground_ribbon" pathArray={paths} sideOrientation={1} position={new Vector3(0, -3, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.MESH}
                   _options={{ mass: 0, restitution: 0.1 }}
                 />
-              </ribbon>
+              </ribbon> */}
 
 
-              {/* <ground
+              <ground
                 name="ground1"
-                width={50}
-                height={120}
-                subdivisions={5}
+                width={200}
+                height={320}
+                subdivisions={40}
+                showSubMeshesBoundingBox={true}
                 receiveShadows={true}
-                position={new Vector3(0, -4, 0)}>
+                position={new Vector3(0, 0, 0)}>
                 <physicsAggregate
                   type={BABYLON.PhysicsShapeType.BOX}
-                  _options={{ mass: 0, restitution: 0.1 }}
+                  _options={{ mass: 0, restitution: 0.01 }}
                 />
-              </ground> */}
+              </ground>
 
             </Scene>
           </Engine>

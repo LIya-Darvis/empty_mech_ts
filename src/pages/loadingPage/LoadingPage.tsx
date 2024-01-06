@@ -48,7 +48,6 @@ export let file_content: string = "";
 const LoadingPage = () => {
 
     const { context_scene, updateScene } = useSceneContext();
-
     const { mesh_arr, updateMeshArr } = useModelContext();
 
     const {openFilePicker, filesContent, loading} = useFilePicker({
@@ -58,7 +57,6 @@ const LoadingPage = () => {
     if (loading) {
         console.log("загрузка...");
         return <div>загрузка...</div>
-        
     } else {
         // изменение содержания файла
         filesContent.map((file) => {

@@ -6,11 +6,14 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use serde_json;
 
+// use rsrl::control::td::SARSA;
+
+
 #[derive(Deserialize, Serialize, Debug)]
 struct MeshPosition {
-    x: i64,
-    y: i64,
-    z: i64
+    x: f64,
+    y: f64,
+    z: f64
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -28,18 +31,40 @@ struct ModelParams {
     finishPoint: ModelMesh
 }
 
-// относим это к драме или к фарсу?
+// относить это к драме или к фарсу?
+
+struct MeshConst {
+    value: i64,
+}
+
+impl MeshConst {
+    pub fn set_value(&mut self, value: i64) {
+        self.value = value;
+    }
+}
+
+const MESH_COUNT_ST: MeshConst = MeshConst {
+    value: 0,
+};
+
+#[tauri::command]
+fn const_initialize(mesh_count: i64) {
+    MESH_COUNT_ST.set_value(mesh_count);
+}
 
 #[tauri::command]
 fn moving(meshes_arr: &str, finish_point: &str) -> String {
 
     let mut finish_point_js = serde_json::from_str::<Vec<ModelMesh>>(&finish_point).unwrap();
+    let mut meshes_point_js = serde_json::from_str::<Vec<ModelMesh>>(&meshes_arr).unwrap();
 
-    format!("Вытаскиваем позицию из жсона: {}, {}, {}", finish_point_js[0].meshPosition.x, finish_point_js[0].meshPosition.y, finish_point_js[0].meshPosition.z)
+    format!("Меш: {}, Константа: {}", meshes_point_js[0].meshPosition.x, MESH_COUNT_ST.value)
 
 }
 
+
 fn main() {
+    
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![moving])
         .run(tauri::generate_context!())
