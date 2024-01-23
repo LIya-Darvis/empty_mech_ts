@@ -199,7 +199,7 @@ const ScenePage = () => {
                             new BABYLON.Vector3(imp_arr[i].meshPosition.x, imp_arr[i].meshPosition.y, imp_arr[i].meshPosition.z),
                             this_id.position
                         );
-                        await sleep(250);
+                        await sleep(200);
                         
                     }
 

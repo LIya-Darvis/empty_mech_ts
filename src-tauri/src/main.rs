@@ -64,31 +64,61 @@ fn moving(meshes_arr: &str, finish_point: &str) -> String {
     let mut total_pos: String = "".to_owned();
     let mut total_imp: String = "".to_owned();
     let mut mesh_count: i64 = 0;
+    let mut mesh_mass: f64 = 20.0;
     let mut buf_mesh_arr = ModelMeshArr { meshArr: Vec::new() };
+    let weight = 1.3;
 
     unsafe {
         mesh_count = MESH_COUNT_ST;
+        mesh_mass = MESH_MASS_ST;
     }
+
+    let mut is_finish: bool = false;
 
     for i in 0..mesh_count {
         let mut buffer_pos: String = "".to_owned();
         let mut buff_imp: String = "".to_owned();
 
-        buffer_pos.push_str(&(meshes_point_js[i as usize].meshId).to_string());
-        buffer_pos.push_str(" | ");
-        buffer_pos.push_str(&(finish_point_js[0].meshPosition.x - meshes_point_js[i as usize].meshPosition.x).to_string());
-        buffer_pos.push_str(" | ");
-        buffer_pos.push_str(&(finish_point_js[0].meshPosition.y - meshes_point_js[i as usize].meshPosition.y).to_string());
-        buffer_pos.push_str(" | ");
-        buffer_pos.push_str(&(finish_point_js[0].meshPosition.z - meshes_point_js[i as usize].meshPosition.z).to_string());
-        buffer_pos.push_str("\n");
+        // buffer_pos.push_str(&(meshes_point_js[i as usize].meshId).to_string());
+        // buffer_pos.push_str(" | ");
+        // buffer_pos.push_str(&(finish_point_js[0].meshPosition.x - meshes_point_js[i as usize].meshPosition.x).to_string());
+        // buffer_pos.push_str(" | ");
+        // buffer_pos.push_str(&(finish_point_js[0].meshPosition.y - meshes_point_js[i as usize].meshPosition.y).to_string());
+        // buffer_pos.push_str(" | ");
+        // buffer_pos.push_str(&(finish_point_js[0].meshPosition.z - meshes_point_js[i as usize].meshPosition.z).to_string());
+        // buffer_pos.push_str("\n");
 
+        let x_comp = finish_point_js[0].meshPosition.x - meshes_point_js[i as usize].meshPosition.x;
+        let y_comp = finish_point_js[0].meshPosition.y - meshes_point_js[i as usize].meshPosition.y;
+        let z_comp = finish_point_js[0].meshPosition.y - meshes_point_js[i as usize].meshPosition.z;
 
-        let mesh_imp = MeshPosition {x: 0.0, y: 50.0, z:40.0};
-        let mesh = ModelMesh {meshId: meshes_point_js[i as usize].meshId.to_string(), meshPosition: mesh_imp};
-        buf_mesh_arr.meshArr.push(mesh);
+        if x_comp.abs() < 3.0 && y_comp.abs() < 3.0 {
+            is_finish = true;
+        }
 
-        total_pos.push_str(&buffer_pos);
+        if is_finish {
+            let mesh_imp = MeshPosition {x: 0.0, y: 0.0, z:0.0};
+            let mesh = ModelMesh {meshId: meshes_point_js[i as usize].meshId.to_string(),
+                meshPosition: mesh_imp};
+            buf_mesh_arr.meshArr.push(mesh);
+        } else {
+            let mesh_imp = MeshPosition {x: 0.0, y: 
+                mesh_mass * 1.7 * weight, 
+                z: mesh_mass * 1.7 * weight};
+            let mesh = ModelMesh {meshId: meshes_point_js[i as usize].meshId.to_string(),
+                 meshPosition: mesh_imp};
+            buf_mesh_arr.meshArr.push(mesh);
+            let mesh_imp = MeshPosition {x: 0.0, y: 
+                mesh_mass * 3.7 * weight, 
+                z: mesh_mass * 3.7 * weight};
+            let mesh = ModelMesh {meshId: meshes_point_js[i as usize].meshId.to_string(),
+                 meshPosition: mesh_imp};
+            buf_mesh_arr.meshArr.push(mesh);
+        }
+
+        
+
+        // total_pos.push_str(&buffer_pos);
     }
 
     let result_imp = json!(buf_mesh_arr.meshArr);

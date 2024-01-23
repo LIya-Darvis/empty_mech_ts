@@ -25,3 +25,6 @@ export const SceneContext = createContext<Returns>({
 });
 
 export const useSceneContext = () => useContext(SceneContext);
+
+
+

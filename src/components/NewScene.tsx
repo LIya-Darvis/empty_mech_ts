@@ -102,7 +102,7 @@ export const NewScene = () => {
         for (var w = 0; w < mapSubX; w++) {
             var x = (w - mapSubX * 0.5) * 2.0;
             var z = (l - mapSubZ * 0.5) * 2.0;
-            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 1.7;
+            var y = (Math.random() * noiseScale + Math.random() * noiseScale) / 3.7;
             y *= (0.5 + y) * y * elevationScale;
                    
             mapData[3 *(l * mapSubX + w)] = x;
